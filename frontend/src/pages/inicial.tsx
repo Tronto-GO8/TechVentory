@@ -54,7 +54,7 @@ export default function Inicial() {
   const handleMudarPagina = useHandleMudarPagina(setPaginaAtual, totalPaginas);
 
   return (
-    <div className="w-full bg-[#303030]">
+    <div className="w-full bg-[#BCDBE8] dark:bg-[#13678A]">
       <div className="w-full grid">
         <SearchFilterContainer
           pesquisar={pesquisar}
@@ -65,15 +65,15 @@ export default function Inicial() {
           }}
           faixaDePreco={{ min: precoMin, max: precoMax }}
         />
-        <Card className="p-6 bg-[#202020] border-none space-y-6 rounded-none">
+        <Card className="p-6 bg-[#BCDBE8] dark:bg-gray-900 border-none space-y-6 rounded-none">
           <div className="space-y-2">
-            <CardTitle className="text-white">
+            <CardTitle className="text-[#074964] dark:text-white">
               Populares ({filtradosComPreco.length} produtos)
             </CardTitle>
             <OuSeparador />
           </div>
 
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-4 bg-[#BCDBE8] text-black dark:bg-gray-900 justify-center">
             <ContainerProduto produtos={produtosPaginaAtual} />
           </div>
           <PaginacaoProdutos
@@ -87,7 +87,7 @@ export default function Inicial() {
           mostrarTotal={true}
           redirecionarPara="/app/carrinho"
         >
-          <span className="text-lg text-white">Carrinho</span>
+          <span className="text-lg text-black dark:text-white">Carrinho</span>
         </BtnCarrinho>
       </div>
     </div>

@@ -81,7 +81,7 @@ export default function SearchFilterContainer({
     if (aoAplicar) aoAplicar(novo);
   };
   return (
-    <div className="bg-[#202020] p-3 md:p-4 w-full overflow-x-auto">
+    <div className="bg-[#BCDBE8] dark:bg-gray-900 p-3 md:p-4 w-full overflow-x-auto">
       <div className="flex flex-col space-y-3 w-full">
         <div className="flex flex-col sm:flex-row gap-2 w-full">
           <div className="flex-1 min-w-0">
@@ -122,7 +122,7 @@ export default function SearchFilterContainer({
               aplicar={aplicar}
               aplicarLabel="Aplicar"
               cancelarLabel="Cancelar"
-              btnCancelarClassName="text-white hover:bg-slate-800 flex-1"
+              btnCancelarClassName="text-black dark:text-white dark:hover:bg-slate-800 flex-1"
               btnAplicarClassName="bg-emerald-600 hover:bg-emerald-700 text-white flex-1"
               className="flex gap-3 w-full"
             />

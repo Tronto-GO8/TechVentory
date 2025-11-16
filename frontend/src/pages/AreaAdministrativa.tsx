@@ -26,7 +26,7 @@ export default function Adiministracao() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-screen max-h-100vh">
+      <div className="flex flex-col w-full dark:bg-gray-900 h-screen max-h-100vh">
         {/* Grid principal */}
         <div className="flex flex-col flex-1 border overflow-hidden">
           <div className=" flex flex-col sm:flex-[0_0_40%] p-2">

@@ -11,7 +11,7 @@ export default function TextoLinkAlternativo({ texto, textoLink, to }: Props) {
         <div className="text-center pt-4">
             <p className="text-sm ">
                 {texto}{" "}
-                <Link to={to} className="text-black hover:text-gray-600 font-semibold">
+                <Link to={to} className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 font-semibold">
                     {textoLink}
                 </Link>
             </p>

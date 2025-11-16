@@ -42,9 +42,9 @@ export default function BtnCarrinho({
     <button
       type="button"
       onClick={handleClick}
-      className={`${className} rounded-full bg-black/80 hover:bg-black/90 transition-all duration-300`}
+      className={`${className} rounded-full bg-white dark:bg-black/80 hover:bg-gray-200 dark:hover:bg-black/90 transition-all duration-300`}
     >
-      <ShoppingCart size={22} className="text-white" />
+      <ShoppingCart size={22} className="text-black dark:text-white" />
 
       {mostrarTotal && totalAdicionado > 0 && (
         <span className="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full bg-red-600">

@@ -30,7 +30,7 @@ export default function SumarioCard({
 }: Props) {
   const [expanded, setExpanded] = useState(!mobile); // no desktop já expande; no mobile começa recolhido
 
-  const base = "bg-zinc-900 border-zinc-800 p-4";
+  const base = "bg-white dark:bg-zinc-900 border-zinc-400 dark:border-zinc-800 p-4";
   const mobileStyles = mobile
     ? "fixed bottom-0 left-0 right-0 rounded-t-xl shadow-2xl mx-4 mb-2"
     : "sticky top-8";
@@ -49,7 +49,7 @@ export default function SumarioCard({
           // versão completa (desktop ou mobile expandido)
           <div>
             {!mobile && (
-              <h2 className="text-xl font-bold text-zinc-50 mb-4">
+              <h2 className="text-xl font-bold  text-black dark:text-zinc-50 mb-4">
                 Resumo do Pedido
               </h2>
             )}

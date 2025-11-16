@@ -58,13 +58,13 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className="dark:bg-gray-900">
       <Header />
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-        <Card className="shadow-black">
+      <div className="flex items-center dark:bg-gray-900 justify-center min-h-[calc(100vh-80px)] p-4">
+        <Card className="shadow-black dark:shadow-white border dark:border-white dark:bg-gray-900">
           <FormCardHeader titulo="Entrar" textoCentralizado />
           <CardContent className="space-y-4">
-            <form className="space-y-4" onSubmit={handleSubmit(enviar)}>
+            <form className="space-y-4 " onSubmit={handleSubmit(enviar)}>
               <InputEmail {...register("email")} />
               <InputError message={errors.email?.message} />
               <InputSenha label="Senha" {...register("senha")} />

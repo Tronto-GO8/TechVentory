@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import ModalSeTornarVendedor from "./ModalSeTornarVendedor";
+import LogoDarkMode from "../../assets/LogoDarkMode.png";
 
 export default function HeaderInicial() {
   const navigate = useNavigate();
@@ -29,13 +30,18 @@ export default function HeaderInicial() {
   };
 
   return (
-    <header className="flex justify-between p-2 items-center bg-[#303030]">
+    <header className="flex justify-between p-2 items-center bg-[#13678A] dark:bg-[#13678A]">
       <Link to={"/app/inicial"}>
         <Button
           variant={"ghost"}
-          className="text-xl font-semibold font-sans text-white"
+          className="text-xl hover:bg-[#074964] font-semibold font-sans text-white"
         >
-          LOGO
+            <img
+            src={LogoDarkMode}
+            alt="Techventory logo"
+            className="h-8 w-auto"
+          />
+          TECHVENTORY
         </Button>
       </Link>
 

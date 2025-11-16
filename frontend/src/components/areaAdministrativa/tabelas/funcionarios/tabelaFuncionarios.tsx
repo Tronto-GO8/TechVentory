@@ -96,11 +96,10 @@ export default function TabelaFuncionarios({
       setLoadingTabela(false);
     }
   }
-/*
+  /*
   useEffect(() => {
     getFuncionarios();
   }, []);
-
   */
 
   // 🔹 Buscar funcionário por nome ou ID
@@ -160,12 +159,12 @@ export default function TabelaFuncionarios({
 
   return (
     <>
-      <div className="flex flex-col gap-2 h-full absolute sm:top-0 top-[0px] left-0 right-0 bottom-0 z-50 sm:relative sm:z-auto bg-white">
-        <Card className="flex flex-col sm:flex-row flex-wrap sm:flex-nowrap justify-between items-center w-full p-2 gap-3 border border-black">
+      <div className="flex flex-col gap-2 h-full absolute sm:top-0 top-[0px] left-0 right-0 bottom-0 z-50 sm:relative sm:z-auto bg-white dark:bg-gray-900">
+        <Card className="flex flex-col dark:bg-gray-900 dark:border-white sm:flex-row flex-wrap sm:flex-nowrap justify-between items-center w-full p-2 gap-3 border border-black">
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full justify-start">
             <Button
               onClick={() => selecionarModulo("vazio")}
-              className="block sm:hidden w-auto"
+              className="block sm:hidden w-auto bg-transparent dark:bg-transparent"
             >
               <ArrowDownToLine />
             </Button>
@@ -175,14 +174,14 @@ export default function TabelaFuncionarios({
                 setMostrarDadosFuncionario(true);
                 setFuncionarioSelecionadoId(null);
               }}
-              className="w-auto"
+              className="w-auto bg-[#13678A] hover:bg-[#0F4F6C] text-white"
             >
               + Novo Funcionário
             </Button>
 
             <div>
               <select
-                className="min-w-[150px] border rounded-md px-1 py-2"
+                className="min-w-[150px] border rounded-md px-1 py-2 bg-white dark:bg-gray-800 dark:text-gray-200 dark:border-white"
                 value={filtroCargo}
                 onChange={(e) => setFiltroCargo(e.target.value)}
               >
@@ -205,14 +204,14 @@ export default function TabelaFuncionarios({
                 erroPesquisarFuncionario ? "border-red-500 focus:ring-red-500" : ""
               }`}
             />
-            <Button onClick={getFuncionarioPorNomeOuId} className="w-auto">
+            <Button onClick={getFuncionarioPorNomeOuId} className="w-auto bg-[#13678A] hover:bg-[#0F4F6C] text-white">
               <Search />
             </Button>
           </div>
         </Card>
 
         <Card
-          className={`w-full p-2 gap-2 border border-black flex-1 overflow-hidden ${
+          className={`w-full p-2 gap-2 dark:bg-gray-900 dark:border-white border border-black flex-1 overflow-hidden ${
             loadingTabela || errorTabela ? "flex justify-center items-center" : ""
           }`}
         >
@@ -223,24 +222,24 @@ export default function TabelaFuncionarios({
           ) : funcionariosFiltrados.length === 0 ? (
             <p className="text-center p-4">Nenhum funcionário encontrado</p>
           ) : (
-            <div className="overflow-auto h-full">
-              <table className="min-w-full border-collapse">
-                <thead className="sticky top-0 bg-white z-10">
+            <div className="overflow-auto dark:bg-gray-900 h-full">
+              <table className="min-w-full dark:bg-gray-900 border-collapse">
+                <thead className="sticky top-0 bg-white dark:bg-gray-900 z-10">
                   <tr>
-                    <th className="p-2 text-center">ID</th>
-                    <th className="p-2 text-center">Nome</th>
-                    <th className="p-2 text-center">Cargo</th>
-                    <th className="p-2 text-center">Data de Admissão</th>
-                    <th className="p-2 text-center">Visualizar</th>
+                    <th className="dark:bg-gray-900 p-2 text-center dark:text-gray-200">ID</th>
+                    <th className="dark:bg-gray-900 p-2 text-center dark:text-gray-200">Nome</th>
+                    <th className="dark:bg-gray-900 p-2 text-center dark:text-gray-200">Cargo</th>
+                    <th className="dark:bg-gray-900 p-2 text-center dark:text-gray-200">Data de Admissão</th>
+                    <th className="dark:bg-gray-900 p-2 text-center dark:text-gray-200">Visualizar</th>
                   </tr>
                 </thead>
                 <tbody>
                   {funcionariosFiltrados.map((func) => (
-                    <tr key={func.id}>
-                      <td className="p-2 text-center">{func.id}</td>
-                      <td className="p-2 text-center">{func.nome}</td>
-                      <td className="p-2 text-center">{func.cargo}</td>
-                      <td className="p-2 text-center">
+                    <tr key={func.id} className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                      <td className="p-2 text-center dark:text-gray-200">{func.id}</td>
+                      <td className="p-2 text-center dark:text-gray-200">{func.nome}</td>
+                      <td className="p-2 text-center dark:text-gray-200">{func.cargo}</td>
+                      <td className="p-2 text-center dark:text-gray-200">
                         {func.dataAdmissao.toLocaleDateString("pt-BR")}
                       </td>
                       <td className="p-2 text-center">
@@ -249,6 +248,7 @@ export default function TabelaFuncionarios({
                             setFuncionarioSelecionadoId(func.id);
                             setMostrarDadosFuncionario(true);
                           }}
+                          className="bg-[#13678A] hover:bg-[#0F4F6C] text-white"
                         >
                           Ver
                         </Button>
