@@ -2,8 +2,12 @@ import { Card, CardTitle } from "../ui/card";
 import InputError from "../InputError";
 import { useState, useEffect } from "react";
 import { Box, Headphones, User, Users, DollarSign, Package } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { api } from "@/services/api";
 
 export default function DadosGerais() {
+
+  const { usuarioAtual } = useAuth();
   // Estados de dados
   const [totalProdutos, setTotalProdutos] = useState(10);
   const [totalProdutosIsLoading, setTotalProdutosIsLoading] = useState(true);
@@ -31,33 +35,74 @@ export default function DadosGerais() {
 
   // Função genérica de fetch
   const fetchData = async (
-    url: string,
-    setData: any,
-    setIsLoading: any,
-    setError: any,
-    fallbackMessage: string
-  ) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(fallbackMessage);
-      const data = await response.json();
-      setData(data);
-    } catch (err: unknown) {
-      if (err instanceof TypeError) setError("Erro de conexão: não foi possível buscar os dados");
-      else setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
+  url: string,
+  setData: any,
+  setIsLoading: any,
+  setError: any,
+  fallbackMessage: string
+) => {
+  try {
+    const response = await api.get(url);
+    setData(response.data);
+  } catch (err: any) {
+    if (!err.response) {
+      setError("Erro de conexão");
+    } else {
+      setError(err.response.data?.message || fallbackMessage);
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  useEffect(() => {
-    fetchData("https://api.exemplo.com/produtos", setTotalProdutos, setTotalProdutosIsLoading, setErrorTotalProdutos, "Erro ao buscar total de produtos");
-    fetchData("https://api.exemplo.com/clientes", setTotalClientes, setTotalClientesIsLoading, setErrorTotalClientes, "Erro ao buscar total de clientes");
-    fetchData("https://api.exemplo.com/chamados", setChamadosPendentes, setChamadosPendentesIsLoading, setErrorChamadosPendentes, "Erro ao buscar chamados pendentes");
-    fetchData("https://api.exemplo.com/funcionarios", setTotalFuncionarios, setTotalFuncionariosIsLoading, setErrorTotalFuncionarios, "Erro ao buscar funcionários");
-    fetchData("https://api.exemplo.com/receita", setReceitaMensal, setReceitaMensalIsLoading, setErrorReceitaMensal, "Erro ao buscar receita mensal");
-    fetchData("https://api.exemplo.com/pedidos", setPedidosDoDia, setPedidosDoDiaIsLoading, setErrorPedidosDoDia, "Erro ao buscar pedidos do dia");
-  }, []);
+useEffect(() => {
+  if (!usuarioAtual) return;
+
+  const id = usuarioAtual.id;
+
+  fetchData(`/vendedores/${id}/dashboard/total-produtos`,
+    setTotalProdutos,
+    setTotalProdutosIsLoading,
+    setErrorTotalProdutos,
+    "Erro ao buscar total de produtos"
+  );
+
+  fetchData(`/vendedores/${id}/dashboard/total-clientes`,
+    setTotalClientes,
+    setTotalClientesIsLoading,
+    setErrorTotalClientes,
+    "Erro ao buscar clientes"
+  );
+
+  fetchData(`/vendedores/${id}/dashboard/chamados-pendentes`,
+    setChamadosPendentes,
+    setChamadosPendentesIsLoading,
+    setErrorChamadosPendentes,
+    "Erro ao buscar chamados"
+  );
+
+  fetchData(`/vendedores/${id}/dashboard/total-funcionarios`,
+    setTotalFuncionarios,
+    setTotalFuncionariosIsLoading,
+    setErrorTotalFuncionarios,
+    "Erro ao buscar funcionários"
+  );
+
+  fetchData(`/vendedores/${id}/dashboard/receita-mensal`,
+    setReceitaMensal,
+    setReceitaMensalIsLoading,
+    setErrorReceitaMensal,
+    "Erro ao buscar receita"
+  );
+
+  fetchData(`/vendedores/${id}/dashboard/pedidos-dia`,
+    setPedidosDoDia,
+    setPedidosDoDiaIsLoading,
+    setErrorPedidosDoDia,
+    "Erro ao buscar pedidos"
+  );
+
+}, [usuarioAtual]);
 
   // Array de cards para simplificar renderização
   const cards = [

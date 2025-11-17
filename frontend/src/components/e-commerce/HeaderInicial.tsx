@@ -19,14 +19,20 @@ export default function HeaderInicial() {
     }
   };
 
-  const confirmarCriacaoDeVendedor = (dados: {
-    nomeDaLoja: string;
-    cnpj: string;
-  }) => {
-    setUserComoVendedor(dados);
+  const confirmarCriacaoDeVendedor = async (dados: {
+  nomeDaLoja: string;
+  cnpj?: string;
+  contaBancaria: string;
+}) => {
+  try {
+    await setUserComoVendedor(dados);
     setMostrarModalVendedor(false);
     navigate("/app/areaAdmnistrativa");
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao criar vendedor");
+  }
+};
 
   return (
     <header className="flex justify-between p-2 items-center bg-[#303030]">

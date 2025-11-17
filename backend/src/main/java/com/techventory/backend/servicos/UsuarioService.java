@@ -38,4 +38,11 @@ public class UsuarioService {
         }
         return Optional.empty();
     }
+
+    // Procura o usuário pelo id
+
+    public Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id).orElse(null);
+    }
+
 }
