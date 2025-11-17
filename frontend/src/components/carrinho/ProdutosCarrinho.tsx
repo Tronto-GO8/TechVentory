@@ -22,7 +22,7 @@ export default function ProdutosCarrinho({
   const imageUrl = imagens.length > 0 ? imagens[0] : fallback;
   return (
     <div className={"space-y-4"}>
-      <Card className="bg-zinc-900 border-zinc-800 p-4">
+      <Card className="bg-white dark:bg-zinc-900 border-zinc-400 dark:border-zinc-800 p-4">
         <div className="flex flex-col sm:flex-row gap-4 mb-4 items-start">
           <div className="relative sm:w-24 sm:h-24 md:w-32 md:h-32 bg-zinc-800 rounded-lg overflow-hidden flex-shrink-0">
             <img
@@ -36,15 +36,15 @@ export default function ProdutosCarrinho({
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-zinc-50 mb-1 truncate">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-black dark:text-zinc-50 mb-1 truncate">
               {produtoTeste.nome}
             </h3>
             {produtoTeste.empresa && (
-              <p className="text-sm text-zinc-400 mb-2">
+              <p className="text-sm text-gray-700 dark:text-zinc-400 mb-2">
                 {produtoTeste.empresa}
               </p>
             )}
-            <p className={"text-base sm:text-lg font-bold text-zinc-50"}>
+            <p className={"text-base sm:text-lg font-bold text-black dark:text-zinc-50"}>
               {formatarPrecoBRL(produtoTeste.preco)}
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function ProdutosCarrinho({
             >
               <Minus className="w-3 h-3" />
             </Button>
-            <span className="text-zinc-50 font-medium w-8 text-center">
+            <span className="text-black dark:text-zinc-50 font-medium w-8 text-center">
               {produtoTeste.quantidade ?? 1}
             </span>
             <Button
@@ -74,7 +74,7 @@ export default function ProdutosCarrinho({
           </div>
 
           <div className="flex items-center gap-3">
-            <p className={"text-base sm:text-lg font-bold text-zinc-50"}>
+            <p className={"text-base sm:text-lg font-bold text-black dark:text-zinc-50"}>
               {formatarPrecoBRL(
                 produtoTeste.preco * (produtoTeste.quantidade ?? 1)
               )}

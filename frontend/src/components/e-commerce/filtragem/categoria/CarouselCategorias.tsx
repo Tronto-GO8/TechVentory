@@ -64,7 +64,7 @@ export default function CarouselCategorias({
                     className={`flex-shrink-0 whitespace-nowrap ${
                       selecionado
                         ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                        : "bg-transparent border-slate-600 text-white hover:bg-slate-800"
+                        : "bg-transparent border-slate-600 text-black dark:text-white hover:bg-[#2D7C9D] dark:hover:bg-slate-800"
                     }`}
                   >
                     {item}

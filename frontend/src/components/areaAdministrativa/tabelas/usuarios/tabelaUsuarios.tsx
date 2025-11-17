@@ -147,8 +147,8 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
 
     return (
         <>
-            <div className="flex flex-col gap-2 h-full absolute sm:top-0 top-[0px] left-0 right-0 bottom-0 z-50 sm:relative sm:z-auto bg-white">
-                <Card className="flex justify-between items-center w-full p-2 gap-2 border border-black">
+            <div className="flex flex-col gap-2 h-full dark:bg-gray-900 absolute sm:top-0 top-[0px] left-0 right-0 bottom-0 z-50 sm:relative sm:z-auto bg-white">
+                <Card className="flex justify-between dark:bg-gray-900 dark:border-white items-center w-full p-2 gap-2 border border-black">
                     {/* Botão à esquerda */}
                     <Button onClick={() => selecionarModulo("vazio")} className="block sm:hidden">
                         <ArrowDownToLine />
@@ -159,13 +159,13 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
                             placeholder={placeholder}
                             className="sm:w-[60%] w-[60%] md:w-[50%] dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030]"
                         />
-                        <Button onClick={filtrarDados}>
+                        <Button onClick={filtrarDados} className="bg-[#13678A] hover:bg-[#0F4F6C] text-white">
                             <Search />
                         </Button>
                     </div>
                 </Card>
 
-                <Card className={`w-full p-2 gap-2 border border-black flex-1 overflow-hidden ${loadingTabela || errorTabela ? "flex justify-center items-center" : ""}`}>
+                <Card className={`w-full dark:bg-gray-900 dark:border-white p-2 gap-2  border border-black flex-1 overflow-hidden ${loadingTabela || errorTabela ? "flex justify-center items-center" : ""}`}>
                     {loadingTabela ? (
                         <p className="text-center p-4">Carregando...</p>
                     ) : errorTabela ? (
@@ -173,28 +173,28 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
                     ) : usuarios.length === 0 ? (
                         <p className="text-center p-4">Nenhum cliente encontrado</p>
                     ) : (
-                        <div className="overflow-auto h-full">
-                            <table className="min-w-full border-collapse">
-                                <thead className="sticky top-0 bg-white z-10">
+                        <div className="overflow-auto dark:bg-gray-900 h-full">
+                            <table className="min-w-full dark:bg-gray-900 border-collapse">
+                                <thead className="sticky top-0 dark:bg-gray-900 bg-white z-10">
                                     <tr>
-                                        <th className="p-2 text-center">ID</th>
-                                        <th className="p-2 text-center">Nome</th>
-                                        <th className="p-2 text-center">Email</th>
-                                        <th className="p-2 text-center">Telefone</th>
-                                        <th className="p-2 text-center">Chamado</th>
-                                        <th className="p-2 text-center">Visualizar</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">ID</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">Nome</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">Email</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">Telefone</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">Chamado</th>
+                                        <th className="dark:bg-gray-900 p-2 text-center">Visualizar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {usuarios.map((user) => (
                                         <tr key={user.id}>
-                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.id}</td>
-                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.nome}</td>
-                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.email}</td>
-                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.telefone}</td>
-                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.numeroChamados}</td>
-                                            <td className="p-2 text-center">
-                                                <Button className="w-[70%]" onClick={() => { setClienteSelecionadoId(user.id); setmostrarDadosCliente(true); }}>Ver</Button>
+                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.id}</td>
+                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.nome}</td>
+                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.email}</td>
+                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.telefone}</td>
+                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.numeroChamados}</td>
+                                            <td className="dark:bg-gray-900 p-2 text-center">
+                                                <Button className="bg-[#13678A] hover:bg-[#0F4F6C] text-white w-[70%]" onClick={() => { setClienteSelecionadoId(user.id); setmostrarDadosCliente(true); }}>Ver</Button>
                                             </td>
                                         </tr>
                                     ))}

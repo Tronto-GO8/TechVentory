@@ -22,16 +22,16 @@ export default function SumarioOrdenado({
       )}
 
       <div className="space-y-3">
-        <div className="flex justify-between text-zinc-300">
+        <div className="flex justify-between text-gray-800 dark:text-zinc-300">
           <span>Subtotal</span>
           <span>R$ {subtotal.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-zinc-300">
+        <div className="flex justify-between text-gray-800 dark:text-zinc-300">
           <span>Frete</span>
           <span>R$ {shippingPrice.toFixed(2)}</span>
         </div>
         <OuSeparador />
-        <div className="flex justify-between text-xl font-bold text-zinc-50">
+        <div className="flex justify-between text-xl font-bold text-black dark:text-zinc-50">
           <span>Total</span>
           <span>R$ {totalPrice.toFixed(2)}</span>
         </div>

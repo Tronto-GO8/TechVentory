@@ -75,9 +75,9 @@ export default function Carrinho() {
   }
 
   return (
-    <div className="min-h-screen bg-[#202020] p-4 md:p-8">
+    <div className="min-h-screen  bg-[#BCDBE8] dark:bg-gray-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold text-zinc-50 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#074964] dark:text-zinc-50 mb-8">
           Carrinho de Compras
         </h1>
 

@@ -75,7 +75,7 @@ export default function DadosGerais() {
         {cards.map((card, idx) => (
           <Card
             key={idx}
-            className="border border-black p-2 flex flex-col justify-between w-full h-full min-h-[60px] sm:min-h-[70px] md:min-h-[80px] box-border max-w-[90%]"
+            className="border dark:bg-gray-900 dark:border-white border-black p-2 flex flex-col justify-between w-full h-full min-h-[60px] sm:min-h-[70px] md:min-h-[80px] box-border max-w-[90%]"
           >
             {/* Cabeçalho do Card */}
             <div className="flex justify-between items-start mb-1">
@@ -94,7 +94,7 @@ export default function DadosGerais() {
               ) : (
                 <p>{card.value}</p>
               )}
-              <p className="text-gray-500">{card.label}</p>
+              <p className="text-gray-500 dark:text-gray-300">{card.label}</p>
             </div>
           </Card>
         ))}
