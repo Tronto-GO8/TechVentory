@@ -58,7 +58,7 @@ public class GoogleAuthService {
     }
 
     // 3) Pega info do usuário a partir do ID TOKEN
-    public String processarLogin(GoogleTokenResponse tokenResponse) throws Exception {
+    public Usuario processarLogin(GoogleTokenResponse tokenResponse) throws Exception {
         String idTokenString = tokenResponse.getIdToken();
 
         GoogleIdToken idToken = GoogleIdToken.parse(JacksonFactory.getDefaultInstance(), idTokenString);
@@ -68,7 +68,8 @@ public class GoogleAuthService {
         String nome = (String) payload.get("name");
         String picture = (String) payload.get("picture");
 
-        Usuario usuario = usuarioRepository.findByEmail(email)
+        // cria ou busca o usuário
+        return usuarioRepository.findByEmail(email)
                 .orElseGet(() -> {
                     Usuario novo = new Usuario();
                     novo.setEmail(email);
@@ -77,8 +78,6 @@ public class GoogleAuthService {
                     novo.setTipoLogin("GOOGLE");
                     return usuarioRepository.save(novo);
                 });
-
-        return jwtService.gerarToken(usuario.getEmail());
     }
 
     public String autenticarComGoogle(String idTokenString) {

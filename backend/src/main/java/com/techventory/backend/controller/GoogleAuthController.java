@@ -1,7 +1,9 @@
 package com.techventory.backend.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.techventory.backend.modelos.Usuario;
 import com.techventory.backend.servicos.GoogleAuthService;
+import com.techventory.backend.servicos.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +15,11 @@ import java.util.Map;
 public class GoogleAuthController {
 
     private final GoogleAuthService googleAuthService;
+    private final JwtService jwtService;
 
-    public GoogleAuthController(GoogleAuthService googleAuthService) {
+    public GoogleAuthController(GoogleAuthService googleAuthService, JwtService jwtService) {
         this.googleAuthService = googleAuthService;
+        this.jwtService = jwtService;
     }
 
     // 1) FRONT PEDIR A URL DO GOOGLE
@@ -29,12 +33,21 @@ public class GoogleAuthController {
     public ResponseEntity<?> callback(@RequestParam("code") String code) {
         try {
             GoogleTokenResponse tokenResponse = googleAuthService.trocarCodePorToken(code);
-            String jwt = googleAuthService.processarLogin(tokenResponse);
 
-            // FRONT-END busca aqui
+            // processa e retorna o usuário completo
+            Usuario usuario = googleAuthService.processarLogin(tokenResponse);
+
+            // gerar jwt
+            String jwt = jwtService.gerarToken(usuario.getEmail());
+
             return ResponseEntity.ok(Map.of(
                     "message", "Login Google OK",
-                    "token", jwt
+                    "token", jwt,
+                    "user", Map.of(
+                            "id", usuario.getIdUsuario(),
+                            "nome", usuario.getNome(),
+                            "email", usuario.getEmail()
+                    )
             ));
 
         } catch (Exception e) {

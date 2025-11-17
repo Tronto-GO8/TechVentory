@@ -22,9 +22,11 @@ export default function () {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2">
-        <UserIcon />
-        Perfil
+      <DropdownMenuTrigger asChild>
+        <button className="flex items-center gap-2">
+          <UserIcon />
+          Perfil
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
@@ -52,6 +54,6 @@ export default function () {
           <span className="text-red-500">Sair</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu >
   );
 }

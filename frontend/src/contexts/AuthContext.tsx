@@ -5,12 +5,14 @@ export type User = {
   id?: number;
   nome?: string;
   email: string;
+  jwt?: string;
   isVendedor?: boolean;
   dadosVendedor?: {
     nomeDaLoja: string;
     cnpj: string;
   };
 };
+
 
 type RawUser = {
   nome?: string;
@@ -25,9 +27,18 @@ type AuthContextType = {
 
   register: (payload: RawUser) => Promise<{ ok: boolean; message?: string }>;
   login: (email: string, senha: string) => Promise<{ ok: boolean; message?: string }>;
-  loginGoogle: (googleToken: string) => Promise<void>;
+  loginGoogle: (token: string, user: User) => Promise<void>;
   logout: () => void;
+
+  // <── ADICIONAR
+  setUserComoVendedor: (dados: {
+    nomeDaLoja: string;
+    cnpj?: string;
+    contaBancaria: string;
+  }) => Promise<void>;
 };
+
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -41,24 +52,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const [loading, setLoading] = useState(false);
 
-  // carregar usuário salvo
-  useEffect(() => {
-    const savedUser = localStorage.getItem(AUTH_USER_KEY);
-    if (savedUser) setUsuarioAtual(JSON.parse(savedUser));
-  }, []);
+  const setUserComoVendedor = async (dados: {
+  nomeDaLoja: string;
+  cnpj?: string;
+  contaBancaria: string;
+}) => {
+  if (!usuarioAtual) return;
 
-  // REGISTRO
-  const register = async (payload: RawUser) => {
-    setLoading(true);
-    try {
-      const res = await api.post("/auth/register", payload);
-      return { ok: true };
-    } catch (err: any) {
-      return { ok: false, message: err?.response?.data?.message ?? "Erro ao registrar" };
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    const res = await api.post(
+      "/vendedores/promover",
+      {
+        idUsuario: usuarioAtual.id,
+        ...dados,
+        cargo: "gerente",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const vendedorCriado = res.data;
+
+    const updatedUser: User = {
+      ...usuarioAtual,
+      isVendedor: true,
+      dadosVendedor: {
+        nomeDaLoja: dados.nomeDaLoja,
+        cnpj: dados.cnpj ?? "",
+      },
+    };
+
+    setUsuarioAtual(updatedUser);
+    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updatedUser));
+  } catch (error) {
+    console.error("Erro ao criar vendedor:", error);
+  }
+};
 
   // LOGIN LOCAL
   const login = async (email: string, senha: string) => {
@@ -87,24 +121,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // LOGIN GOOGLE
-  const loginGoogle = async (googleToken: string) => {
-    setLoading(true);
-    try {
-      const res = await api.post("/auth/google", { token: googleToken });
+const loginGoogle = async (token: string, user: User) => {
+  setLoading(true);
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
 
-      const { token, user } = res.data;
-
-      localStorage.setItem(TOKEN_KEY, token);
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-
-      setUsuarioAtual(user);
-      setEstaAutenticado(true);
-    } catch (e) {
-      console.error("Erro no login Google:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setUsuarioAtual(user);
+    setEstaAutenticado(true);
+  } catch (e) {
+    console.error("Erro ao processar login Google:", e);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // LOGOUT
   const logout = () => {
@@ -113,6 +143,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUsuarioAtual(null);
     setEstaAutenticado(false);
   };
+
+  
+  // carregar usuário salvo
+  useEffect(() => {
+    const savedUser = localStorage.getItem(AUTH_USER_KEY);
+    if (savedUser) setUsuarioAtual(JSON.parse(savedUser));
+  }, []);
+
+  // REGISTRO
+  const register = async (payload: RawUser) => {
+    setLoading(true);
+    try {
+      const res = await api.post("/auth/register", payload);
+      return { ok: true };
+    } catch (err: any) {
+      return { ok: false, message: err?.response?.data?.message ?? "Erro ao registrar" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <AuthContext.Provider
@@ -124,6 +175,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         loginGoogle,
         logout,
+        setUserComoVendedor,
       }}
     >
       {children}
