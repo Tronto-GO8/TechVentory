@@ -8,17 +8,17 @@ export default function MinhasInfo() {
   const [mostraSenha, setMostraSenha] = useState(false);
 
   const [user, setUser] = useState({
-    nome: "",
-    email: "",
-    cpf: "",
+    nome: "Gustavo Jeziel Silveira",
+    email: "gustavofogaca85@gmail.com",
+    cpf: "124 423 253 51",
     endereco: {
-      cep: "",
-      rua: "",
-      numero: "",
-      complemento: "",
-      bairro: "",
-      cidade: "",
-      estado: "",
+      cep: "30640-060",
+      rua: "Maria Cruz",
+      numero: "23",
+      complemento: "na viela",
+      bairro: "ipanema",
+      cidade: "são paulo",
+      estado: "sergipe",
     },
   });
 
@@ -87,6 +87,7 @@ export default function MinhasInfo() {
   // CARREGAR DADOS DO BACKEND
   // ============================================================
   useEffect(() => {
+    /*
     if (!usuarioAtual) return;
 
     async function carregar() {
@@ -127,11 +128,13 @@ export default function MinhasInfo() {
     }
 
     carregar();
+    */
   }, [usuarioAtual]);
 
   // ============================================================
   // SALVAR ALTERAÇÕES
   // ============================================================
+  /*
   async function handleSalvarMudancas() {
     if (!validarCampos()) {
       alert("Preencha todos os campos corretamente.");
@@ -170,10 +173,25 @@ export default function MinhasInfo() {
       alert("Erro ao atualizar usuário");
     }
   }
+*/
 
+
+///temp
+
+function handleSalvarMudancas() {
+  if (!validarCampos()) {
+    alert("Preencha todos os campos corretamente.");
+    return;
+  }
+
+  // MODO APRESENTAÇÃO
+  alert("Informações atualizadas");
+  setEditando(false);
+}
   // ============================================================
   // ALTERAR SENHA
   // ============================================================
+  /*
   async function handleAlterarSenha() {
     if (novaSenha !== confirmarSenha)
       return alert("As senhas não conferem!");
@@ -206,7 +224,15 @@ export default function MinhasInfo() {
       alert("Erro ao alterar senha");
     }
   }
+*/
+function handleAlterarSenha() {
+  if (novaSenha !== confirmarSenha)
+    return alert("As senhas não conferem!");
 
+  // MODO APRESENTAÇÃO
+  alert("Senha alterada");
+  setMostraSenha(false);
+}
   // ============================================================
   // UI
   // ============================================================
@@ -237,7 +263,7 @@ export default function MinhasInfo() {
               value={user.nome}
               readOnly={!editando}
               onChange={(e) => setUser({ ...user, nome: e.target.value })}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
             />
             <InputError message={errors.nome} />
           </label>
@@ -250,7 +276,7 @@ export default function MinhasInfo() {
               value={user.email}
               readOnly={!editando}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
             />
             <InputError message={errors.email} />
           </label>
@@ -263,7 +289,7 @@ export default function MinhasInfo() {
               value={user.cpf}
               readOnly={!editando}
               onChange={(e) => setUser({ ...user, cpf: e.target.value })}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
             />
             <InputError message={errors.cpf} />
           </label>
@@ -286,7 +312,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, cep: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.cep} />
             </label>
@@ -304,7 +330,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, numero: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.numero} />
             </label>
@@ -322,7 +348,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, cidade: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.cidade} />
             </label>
@@ -340,7 +366,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, rua: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.rua} />
             </label>
@@ -358,7 +384,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, complemento: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.complemento} />
             </label>
@@ -376,7 +402,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, bairro: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.bairro} />
             </label>
@@ -394,7 +420,7 @@ export default function MinhasInfo() {
                     endereco: { ...user.endereco, estado: e.target.value }
                   })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
               <InputError message={errors.estado} />
             </label>
@@ -407,23 +433,23 @@ export default function MinhasInfo() {
           <div className="flex gap-4 mt-6">
             <button
               onClick={handleSalvarMudancas}
-              className="px-4 py-2 border rounded bg-blue-600 text-white"
+              className="px-4 py-2 border rounded bg-blue-600 text-white dark:bg-gray-900 dark:border-white"
             >
               Salvar
             </button>
 
             <button
               onClick={() => setMostraSenha(true)}
-              className="px-4 py-2 border rounded"
+              className="px-4 py-2 border rounded dark:bg-gray-900 dark:border-white"
             >
               Alterar Senha
-            </button>
+            </button >
           </div>
         )}
 
         {/* MODAL DE SENHA */}
         {mostraSenha && (
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded shadow-xl z-50 w-80">
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded shadow-xl z-50 w-80 dark:bg-gray-800 border border-black">
             <h3 className="text-lg font-semibold mb-4">Alterar Senha</h3>
 
             <label className="block mb-2">
@@ -432,7 +458,7 @@ export default function MinhasInfo() {
                 value={senhaAtual}
                 type="password"
                 onChange={(e) => setSenhaAtual(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white dark:bg-gray-900 dark:border-white"
               />
             </label>
 
@@ -442,7 +468,7 @@ export default function MinhasInfo() {
                 value={novaSenha}
                 type="password"
                 onChange={(e) => setNovaSenha(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
             </label>
 
@@ -452,21 +478,21 @@ export default function MinhasInfo() {
                 value={confirmarSenha}
                 type="password"
                 onChange={(e) => setConfirmarSenha(e.target.value)}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded dark:bg-gray-900 dark:border-white"
               />
             </label>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setMostraSenha(false)}
-                className="px-4 py-2 border rounded"
+                className="px-4 py-2 border rounded dark:bg-gray-900 dark:border-white"
               >
                 Cancelar
               </button>
 
               <button
                 onClick={handleAlterarSenha}
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="px-4 py-2 bg-blue-600 border text-white rounded dark:bg-gray-900 dark:border-white"
               >
                 Alterar senha
               </button>
