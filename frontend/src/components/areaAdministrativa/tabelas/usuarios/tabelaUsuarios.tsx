@@ -5,9 +5,10 @@ import { Search, ArrowDownToLine } from "lucide-react";
 import { Modulos } from "@/components/ui/modulos";
 import { useEffect, useState } from "react";
 import ModalDadosUsuario from "./modalDadosUsuario";
+import { useAuth } from "@/contexts/AuthContext";
 
 // TOKEN
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("authToken");
 
 // NESCESSÁRIO PARA RODAR
 interface TabelaUsuariosProps {
@@ -23,59 +24,69 @@ interface Usuario {
     id: number;
     nome: string;
     email: string;
-    telefone: string;
+    telefone?: string | null;
     numeroChamados: string;
 }
 
 export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: TabelaUsuariosProps) {
+    const { usuarioAtual } = useAuth();
     const [mostrarDadosCliente, setmostrarDadosCliente] = useState(false)
     const [clienteSelecionadoId, setClienteSelecionadoId] = useState<number | null>(null);
     const [pesquisa, setPesquisa] = useState("")
     const [loadingTabela, setLoadingTabela] = useState(false);
     const [errorTabela, setErrorTabela] = useState<string | null>(null);
-    const [usuarios, setUsuarios] = useState<Usuario[]>([{ id: 1, nome: "Ana Souza", email: "ana@email.com", telefone: "55 51 984213", numeroChamados: "5" },
-    { id: 1, nome: "Ana Souza", email: "ana@email.com", telefone: "55 51 984213", numeroChamados: "5" },
-    { id: 1, nome: "Ana Souza", email: "ana@email.com", telefone: "55 51 984213", numeroChamados: "5" },
-    { id: 1, nome: "Ana Souza", email: "ana@email.com", telefone: "55 51 984213", numeroChamados: "5" },
-    { id: 1, nome: "Ana Souza", email: "ana@email.com", telefone: "55 51 984213", numeroChamados: "5" }
+    const [usuarios, setUsuarios] = useState<Usuario[]>([
+        { id: 1, nome: "Mariana Alves Costa", email: "mariana.costa@example.com", telefone: "(11) 98876-5432", numeroChamados: "2" },
+        { id: 2, nome: "Carlos Souza", email: "carlos@email.com", telefone: "51988888888", numeroChamados: "1" },
+        { id: 3, nome: "Beatriz Lima", email: "beatriz@email.com", telefone: "51977777777", numeroChamados: "0" },
+        { id: 4, nome: "João Pedro", email: "joao@email.com", telefone: "51966666666", numeroChamados: "2" },
+        { id: 5, nome: "Mariana Rocha", email: "mariana@email.com", telefone: "51955555555", numeroChamados: "4" },
+
     ]);
+    const idVendedor = usuarioAtual?.id;
 
-    //Pesquisa clientes para lista, padrão de iniciar a página
-    useEffect(() => {
-        async function getClientes() {
-            try {
-                const response = await fetch(`/api/clientes`, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
+    /*
+        //Pesquisa clientes para lista, padrão de iniciar a página
+        useEffect(() => {
+            async function getClientes() {
+                if (!idVendedor) return; // impede erro
+                console.log(idVendedor)
+                console.log(token)
+                try {
+                    const response = await fetch(`http://localhost:8080/Techventory/clientes/vendedor/${idVendedor}`, {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) throw new Error("Falha ao buscar dados");
+    
+                    const data = await response.json();
+                    if (data.length === 0) {
+                        setErrorTabela("Nenhum cliente encontrado.");
+                        return;
                     }
-                });
-                if (!response.ok) throw new Error("Falha ao buscar dados");
-
-                const data = await response.json();
-                if (data.length === 0) {
-                    setErrorTabela("Nenhum cliente encontrado.");
-                    return;
+                    setUsuarios(data);
+                    setErrorTabela(null);
+                } catch (err: unknown) {
+                    if (err instanceof TypeError) {
+                        setErrorTabela("Erro de conexão: não foi possível buscar os dados.");
+                        console.log("Erro de conexão: não foi possível buscar os dados.");
+                    } else {
+                        setErrorTabela((err as Error).message);
+                        console.log((err as Error).message)
+                    }
+                } finally {
+                    setLoadingTabela(false);
                 }
-                setUsuarios(data);
-                setErrorTabela(null);
-            } catch (err: unknown) {
-                if (err instanceof TypeError) {
-                    setErrorTabela("Erro de conexão: não foi possível buscar os dados.");
-                } else {
-                    setErrorTabela((err as Error).message);
-                }
-            } finally {
-                setLoadingTabela(false);
+    
             }
-
-        }
-
-        //getClientes();
-    }, []);
-
-
-
-
+    
+            getClientes();
+        }, [idVendedor]);
+    
+    
+    
+    */
 
     //Filtrar clientes
     async function filtrarDados() {
@@ -98,7 +109,7 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
         setLoadingTabela(true); // mostrar tela de carregamento
 
         try {
-            const response = await fetch(`/api/clientes?${FiltroDeClientes}=${encodeURIComponent(valorFiltro)}`, {
+            const response = await fetch(`http://localhost:8080/Techventory/clientes/vendedor/${idVendedor}?${FiltroDeClientes}=${encodeURIComponent(valorFiltro)}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -174,7 +185,7 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
                         <p className="text-center p-4">Nenhum cliente encontrado</p>
                     ) : (
                         <div className="overflow-auto dark:bg-gray-900 h-full">
-                            <table className="min-w-full dark:bg-gray-900 border-collapse">
+                            <table className="min-w-full dark:bg-gray-900 table-auto">
                                 <thead className="sticky top-0 dark:bg-gray-900 bg-white z-10">
                                     <tr>
                                         <th className="dark:bg-gray-900 p-2 text-center">ID</th>
@@ -187,14 +198,18 @@ export default function TabelaUsiarios({ moduloAtivo, selecionarModulo }: Tabela
                                 </thead>
                                 <tbody>
                                     {usuarios.map((user) => (
-                                        <tr key={user.id}>
-                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.id}</td>
-                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.nome}</td>
-                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.email}</td>
-                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.telefone}</td>
-                                            <td className="dark:bg-gray-900 p-2 text-center text-sm sm:text-base md:text-lg">{user.numeroChamados}</td>
-                                            <td className="dark:bg-gray-900 p-2 text-center">
-                                                <Button className="bg-[#13678A] hover:bg-[#0F4F6C] text-white w-[70%]" onClick={() => { setClienteSelecionadoId(user.id); setmostrarDadosCliente(true); }}>Ver</Button>
+                                        <tr key={user.id} className="odd:bg-white even:bg-gray-100 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.id}</td>
+                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.nome}</td>
+                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.email}</td>
+                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.telefone}</td>
+                                            <td className="p-2 text-center text-sm sm:text-base md:text-lg">{user.numeroChamados}</td>
+                                            <td className="p-2 text-center">
+                                                <Button className="bg-[#13678A] hover:bg-[#0F4F6C] text-white w-[70%]"
+                                                    onClick={() => { setClienteSelecionadoId(user.id); setmostrarDadosCliente(true); }}
+                                                >
+                                                    Ver
+                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

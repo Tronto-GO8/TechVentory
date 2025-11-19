@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import FiltroItens from "@/components/ui/filtroItens";
 import InputError from "@/components/InputError";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ModalProps {
   idItem?: number;
@@ -21,12 +22,14 @@ interface Produto {
 }
 
 export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLista }: ModalProps) {
+  const { usuarioAtual } = useAuth();
   const [abaAtiva, setAbaAtiva] = useState<"informacoes" | "imagens">("informacoes");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [categorias, setCategorias] = useState<string[]>([]);
   const [imagens, setImagens] = useState<(File | string)[]>([]);
+  const idVendedor = usuarioAtual.id;
   const [errosCard, setErrosCard] = useState({
     nome: "",
     preco: "",
@@ -70,12 +73,12 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
   const removerCategoria = (cat: string) => {
     setCategorias(categorias.filter((c) => c !== cat));
   };
-
+/*
   useEffect(() => {
     const data = produto;
     setImagens(Array.isArray(data.imagens) ? data.imagens : []);
   }, [produto]);
-
+*/
   // Erro dos campos obrigatórios
   const validarCampos = () => {
     const novosErros = {
@@ -119,57 +122,86 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
     return Object.values(novosErros).every((erro) => erro === "");
   };
 
+  const [mockCarregado, setMockCarregado] = useState(false);
 
-  // Buscar dados se necessário
-  useEffect(() => {
-    if (!idItem) {
-      setproduto({
-        nome: "",
-        preco: 0,
-        quantidade: 0,
-        quantidadeMinima: 0,
-        descricao: "",
-        imagens: [],
-        categorias: [],
-      });
-      setCategorias([]);
-      setImagens([]);
-      return;
-    }
+useEffect(() => {
+  if (mockCarregado) return; // impede duplicação
 
-    async function getDadosProduto() {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/produtos/${idItem}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+  if (idVendedor) {
+    setproduto({
+      nome: "Notebook Gamer X-15",
+      preco: 6499.90,
+      quantidade: 12,
+      quantidadeMinima: 5,
+      descricao: "Um notebook voltado para jogos",
+      imagens: [],
+      categorias: [],
+    });
+  }
+
+  setCategorias(["Informática", "Notebook"]);
+  setImagens([
+    "https://cdn.awsli.com.br/600x450/954/954868/produto/68626025/5d150286dc.jpg"
+  ]);
+
+  setMockCarregado(true);
+}, [idVendedor]);
+
+
+
+  /*
+    // Buscar dados se necessário
+    useEffect(() => {
+      if (!idItem) {
+        setproduto({
+          nome: "",
+          preco: 0,
+          quantidade: 0,
+          quantidadeMinima: 0,
+          descricao: "",
+          imagens: [],
+          categorias: [],
         });
-        if (!response.ok) throw new Error("Erro ao carregar dados do produto");
-
-        const data = await response.json();
-        setproduto(data);
-        setCategorias(Array.isArray(data.categorias) ? data.categorias : []);
-        setImagens(data.imagens || []);
-      } catch (err: unknown) {
-        setErro(err instanceof Error ? err.message : "Erro desconhecido");
-      } finally {
-        setLoading(false);
+        setCategorias([]);
+        setImagens([]);
+        return;
       }
-    }
-
-    getDadosProduto();
-  }, [idItem]);
+  
+      async function getDadosProduto() {
+        setLoading(true);
+        try {
+          const response = await fetch(`/api/produtos/${idItem}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+          });
+          if (!response.ok) throw new Error("Erro ao carregar dados do produto");
+  
+          const data = await response.json();
+          setproduto(data);
+          setCategorias(Array.isArray(data.categorias) ? data.categorias : []);
+          setImagens(data.imagens || []);
+        } catch (err: unknown) {
+          setErro(err instanceof Error ? err.message : "Erro desconhecido");
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      getDadosProduto();
+    }, [idItem]);
+  
+    */
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30">
       <div
-        className={`bg-white rounded shadow-lg ${abaAtiva == "informacoes"
-          ? "w-[90vw] sm:w-[80vw] md:w-[60vw] h-[90vh]"
+        className={`bg-white rounded shadow-lg dark:bg-[#202020] rounded-lg dark:text-gray-200 ${abaAtiva == "informacoes"
+          ? "w-[90vw] sm:w-[80vw] md:w-[50vw] h-[70vh]"
           : "w-[90vw] sm:w-[70vw] md:w-[50vw] h-[70vh]"
           }`}
       >
-        <div className="flex h-full flex-col gap-2 border border-black">
+        <div className="flex h-full flex-col gap-2">
           <div className="flex flex-col flex-grow gap-2 overflow-hidden m-4 h-full">
             {loading ? (
               <p>Carregando dados dos produtos...</p>
@@ -189,11 +221,11 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                         {/* Área principal */}
                         <div className="grid grid-cols-2 gap-2">
                           {/* Coluna 1 */}
-                          <div className="flex flex-col gap-2">
+                          <div className="grid grid-cols-1 md:grid-rows-3 gap-2 w-full">
                             <div>
                               <p>Nome do produto</p>
                               <Input
-                                className="w-[80%]"
+                                className="w-[80%] border border-black"
                                 value={produto.nome}
                                 onChange={(e) => {
                                   setproduto({ ...produto, nome: e.target.value });
@@ -206,7 +238,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                             <div>
                               <p>Quantidade em estoque</p>
                               <Input
-                                className="w-[80%]"
+                                className="w-[80%] border border-black"
                                 type="number"
                                 value={produto.quantidade}
                                 onChange={(e) => {
@@ -220,7 +252,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                             <div>
                               <p>Quantidade mínima</p>
                               <Input
-                                className="w-[80%]"
+                                className="w-[80%] border border-black"
                                 type="number"
                                 value={produto.quantidadeMinima}
                                 onChange={(e) => {
@@ -234,11 +266,11 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                           </div>
 
                           {/* Coluna 2 */}
-                          <div className="flex flex-col gap-2">
+                          <div className="grid grid-cols-1 md:grid-rows-3 gap-2 w-full ">
                             <div>
                               <p>Preço</p>
                               <Input
-                                className="w-[80%]"
+                                className="w-[80%] border border-black"
                                 type="number"
                                 value={produto.preco}
                                 onChange={(e) => {
@@ -253,50 +285,54 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               <InputError message={errosCard.preco} />
                             </div>
 
-                            <div>
-                              <p>Categoria</p>
-                              <div className="flex items-center gap-2 text-sm sm:text-md md:text-md">
-                                <div>
-                                  <FiltroItens
-                                    value={categoriaSelecionada}
-                                    onChange={setCategoriaSelecionada}
-                                  />
-                                  <InputError message={errosCard.categorias} />
-                                </div>
-                                <Button onClick={() => {
-                                  adicionarCategoria();
-                                  if (errosCard.categorias)
-                                    setErrosCard({ ...errosCard, categorias: "" });
-                                }}
-                                >Add</Button>
-                              </div>
-                            </div>
+                            <div className="row-span-2 flex flex-col gap-2 h-full">
 
-                            <div className="flex-1 border border-black rounded-md overflow-y-auto max-h-[120px]">
-                              <div
-                                className={`flex flex-wrap gap-1 p-2 ${categorias.length <= 0 ? "justify-center items-center" : ""
-                                  }`}
-                              >
-                                {categorias.length > 0 ? (
-                                  categorias.map((cat) => (
-                                    <div
-                                      key={cat}
-                                      className="flex items-center text-[10px] px-2 py-0.5 rounded-full bg-black text-white border border-white/10 shrink-0"
-                                    >
-                                      <span className="truncate">{cat}</span>
-                                      <button
-                                        onClick={() => removerCategoria(cat)}
-                                        className="ml-1 text-[10px] text-gray-300 hover:text-gray"
+                              <div>
+                                <p>Categoria</p>
+                                <div className="flex items-center gap-2 text-sm sm:text-md md:text-md ">
+                                  <div className="text-black w-[80%]">
+                                    <FiltroItens
+                                      value={categoriaSelecionada}
+                                      onChange={setCategoriaSelecionada}
+
+                                    />
+                                    <InputError message={errosCard.categorias} />
+                                  </div>
+                                  <Button onClick={() => {
+                                    adicionarCategoria();
+                                    if (errosCard.categorias)
+                                      setErrosCard({ ...errosCard, categorias: "" });
+                                  }}
+                                  >Add</Button>
+                                </div>
+                              </div>
+
+                              <div className="flex-1 border border-black rounded-md overflow-y-auto h-full">
+                                <div
+                                  className={`flex flex-wrap gap-1 p-2 ${categorias.length <= 0 ? "justify-center items-center" : ""
+                                    }`}
+                                >
+                                  {categorias.length > 0 ? (
+                                    categorias.map((cat) => (
+                                      <div
+                                        key={cat}
+                                        className="flex items-center text-[10px] px-2 py-0.5 rounded-full bg-black text-white border border-white/10 shrink-0"
                                       >
-                                        ×
-                                      </button>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <p className="text-gray-500 text-sm text-center">
-                                    Nenhuma categoria adicionada
-                                  </p>
-                                )}
+                                        <span className="truncate">{cat}</span>
+                                        <button
+                                          onClick={() => removerCategoria(cat)}
+                                          className="ml-1 text-[10px] text-gray-300 hover:text-gray"
+                                        >
+                                          ×
+                                        </button>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <p className="text-gray-500 text-sm text-center">
+                                      Nenhuma categoria adicionada
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -307,7 +343,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                           <p>Descrição do produto</p>
                           <textarea
                             placeholder="Descreva detalhadamente o produto"
-                            className="text-lg w-full h-[120px] pl-2 pt-2 pr-2 border border-black rounded-lg text-sm resize-none"
+                            className="text-lg w-full h-[120px] pl-2 pt-2 pr-2 border border-black rounded-lg text-sm resize-none dark:bg-gray-800 dark:text-gray-200"
                             value={produto.descricao}
                             onChange={(e) =>
                               setproduto({ ...produto, descricao: e.target.value })
@@ -329,20 +365,16 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                               <div className="flex flex-col gap-2 w-full">
                                 <div className="flex flex-wrap gap-2 justify-center items-center p-2 rounded-md min-h-[150px] w-full border">
                                   {imagens.map((img, index) => (
-                                    <div key={index} className="relative w-24 h-24 border rounded-md overflow-hidden">
-                                      {typeof img === "string" ? (
-                                        <img
-                                          src={img}
-                                          alt={`Imagem ${index + 1}`}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      ) : (
-                                        <img
-                                          src={URL.createObjectURL(img)}
-                                          alt={`Imagem ${index + 1}`}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      )}
+                                    <div
+                                      key={index}
+                                      className="relative w-24 h-24 border rounded-md overflow-hidden"
+                                    >
+                                      <img
+                                        src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                                        alt={`Imagem ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                      />
+
                                       <button
                                         onClick={() => removerImagem(index)}
                                         className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
@@ -351,6 +383,7 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
                                       </button>
                                     </div>
                                   ))}
+
                                   {imagens.length < 5 && (
                                     <label className="w-24 h-24 border-2 border-dashed border-gray-400 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
                                       <span className="text-2xl text-gray-500">+</span>
@@ -393,53 +426,44 @@ export default function ModalDadosEstoque({ setMostrarDados, idItem, atualizarLi
 
               <Button
                 onClick={async () => {
-                  if (abaAtiva === "imagens") {
-                    // Validação simples
+                  if (abaAtiva === "informacoes") {
                     if (!validarCampos()) return;
-
-                    const metodo = idItem ? "PUT" : "POST";
-                    const url = idItem ? `/api/produtos/${idItem}` : "/api/produtos";
-
-                    const formData = new FormData();
-                    formData.append("nome", produto.nome);
-                    formData.append("quantidade", produto.quantidade.toString());
-                    formData.append("quantidadeMinima", produto.quantidadeMinima.toString());
-                    formData.append("preco", produto.preco.toString());
-                    formData.append("descricao", produto.descricao);
-                    categorias.forEach((c) => formData.append("categorias", c));
-                    imagens.forEach((img) => {
-                      if (img instanceof File) {
-                        formData.append("imagens", img);
-                      }
-                    });
-
-                    try {
-                      const response = await fetch(url, {
-                        method: metodo,
-                        headers: {
-                          Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                        body: formData,
-                      });
-
-                      if (!response.ok) throw new Error("Erro ao salvar produto");
-
-                      alert(idItem ? "Produto atualizado!" : "Produto criado!");
-                      setMostrarDados(false);
-                      atualizarLista();
-                    } catch (err) {
-                      console.error(err);
-                      alert("Falha ao salvar os dados.");
-                    }
-                  } else if (abaAtiva === "informacoes") {
-                    if (!validarCampos()) {
-                      return;
-                    }
                     setAbaAtiva("imagens");
                     return;
                   }
+
+                  // Agora sim: aba IMAGENS → ENVIAR
+                  const metodo = idItem ? "PUT" : "POST";
+                  const url = idItem
+                    ? `http://localhost:8080/Techventory/api/produtos/${idItem}`
+                    : "http://localhost:8080/Techventory/api/produtos/adicionar";
+
+                  const formData = new FormData();
+                  formData.append("idVendedor", String(idVendedor));
+                  formData.append("nome", produto.nome);
+                  formData.append("quantidade", String(produto.quantidade));
+                  formData.append("quantidadeMinima", String(produto.quantidadeMinima));
+                  formData.append("preco", String(produto.preco).replace(",", "."));
+                  formData.append("descricao", produto.descricao);
+                  /*
+                                    categorias.forEach(cat => formData.append("categorias", cat));
+                                    imagens.forEach(img => img instanceof File && formData.append("imagens", img));
+                  */
+                  console.log(FormData)
+                  console.log(idItem)
+
+                  const response = await fetch(url, {
+                    method: "POST",
+                    body: formData,
+                  });
+
+                  if (!response.ok) { alert("Erro ao salvar"); return; }
+
+                  setMostrarDados(false);
+                  atualizarLista();
                 }}
               >
+
                 {abaAtiva == "informacoes"
                   ? "Continuar"
                   : idItem

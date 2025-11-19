@@ -9,15 +9,15 @@ export default function DadosGerais() {
 
   const { usuarioAtual } = useAuth();
   // Estados de dados
-  const [totalProdutos, setTotalProdutos] = useState(10);
+  const [totalProdutos, setTotalProdutos] = useState(6);
   const [totalProdutosIsLoading, setTotalProdutosIsLoading] = useState(true);
   const [errorTotalProdutos, setErrorTotalProdutos] = useState<string | null>(null);
 
-  const [totalClientes, setTotalClientes] = useState(53);
+  const [totalClientes, setTotalClientes] = useState(5);
   const [totalClientesIsLoading, setTotalClientesIsLoading] = useState(true);
   const [errorTotalClientes, setErrorTotalClientes] = useState<string | null>(null);
 
-  const [chamadosPendentes, setChamadosPendentes] = useState(21);
+  const [chamadosPendentes, setChamadosPendentes] = useState(2);
   const [chamadosPendentesIsLoading, setChamadosPendentesIsLoading] = useState(true);
   const [errorChamadosPendentes, setErrorChamadosPendentes] = useState<string | null>(null);
 
@@ -32,13 +32,12 @@ export default function DadosGerais() {
   const [pedidosDoDia, setPedidosDoDia] = useState(2);
   const [pedidosDoDiaIsLoading, setPedidosDoDiaIsLoading] = useState(true);
   const [errorPedidosDoDia, setErrorPedidosDoDia] = useState<string | null>(null);
-
+/*
   // Função genérica de fetch
   const fetchData = async (
   url: string,
   setData: any,
   setIsLoading: any,
-  setError: any,
   fallbackMessage: string
 ) => {
   try {
@@ -101,26 +100,29 @@ useEffect(() => {
     setErrorPedidosDoDia,
     "Erro ao buscar pedidos"
   );
+  
 
 }, [usuarioAtual]);
 
+*/
+
   // Array de cards para simplificar renderização
   const cards = [
-    { title: "Total de Produtos", value: totalProdutos, loading: totalProdutosIsLoading, error: errorTotalProdutos, icon: <Box className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Produtos Cadastrados" },
-    { title: "Total de Clientes", value: totalClientes, loading: totalClientesIsLoading, error: errorTotalClientes, icon: <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Clientes Cadastrados" },
-    { title: "Chamados Pendentes", value: chamadosPendentes, loading: chamadosPendentesIsLoading, error: errorChamadosPendentes, icon: <Headphones className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Assistência Técnica" },
-    { title: "Total de Funcionários", value: totalFuncionarios, loading: totalFuncionariosIsLoading, error: errorTotalFuncionarios, icon: <User className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Funcionários Cadastrados" },
-    { title: "Receita Mensal", value: `R$ ${receitaMensal}`, loading: receitaMensalIsLoading, error: errorReceitaMensal, icon: <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Receita do Mês" },
-    { title: "Pedidos em Processamento", value: pedidosDoDia, loading: pedidosDoDiaIsLoading, error: errorPedidosDoDia, icon: <Package className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Pedidos em andamento" },
+    { title: "Total de Produtos", value: totalProdutos, loading: false, error: null, icon: <Box className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Produtos Cadastrados" },
+    { title: "Total de Clientes", value: totalClientes, loading: false, error: null, icon: <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Clientes Cadastrados" },
+    { title: "Chamados Pendentes", value: chamadosPendentes, loading: false, error: null, icon: <Headphones className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Assistência Técnica" },
+    { title: "Total de Funcionários", value: totalFuncionarios, loading: false, error: null, icon: <User className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Funcionários Cadastrados" },
+    { title: "Receita Mensal", value: `R$ ${receitaMensal}`, loading: false, error: null, icon: <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Receita do Mês" },
+    { title: "Pedidos em Processamento", value: pedidosDoDia, loading: false, error: null, icon: <Package className="w-5 h-5 sm:w-6 sm:h-6 md:w-8" />, label: "Pedidos em andamento" },
   ];
 
   return (
-    <div className="p-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 items-center">
+    <div className="p-2 h-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 h-full justify-items-center items-center">
         {cards.map((card, idx) => (
           <Card
             key={idx}
-            className="border dark:bg-gray-900 dark:border-white border-black p-2 flex flex-col justify-between w-full h-full min-h-[60px] sm:min-h-[70px] md:min-h-[80px] box-border max-w-[90%]"
+            className="border dark:bg-gray-900 dark:border-white border-black p-3 flex flex-col justify-between w-full h-full min-h-[60px] sm:min-h-[70px] md:min-h-[80px] box-border max-w-[90%]"
           >
             {/* Cabeçalho do Card */}
             <div className="flex justify-between items-start mb-1">
@@ -137,7 +139,7 @@ useEffect(() => {
               ) : card.error ? (
                 <InputError message={card.error || undefined} />
               ) : (
-                <p>{card.value}</p>
+                <p className="text-lg md:text-xl lg:text-2xl font-bold pb-7">{card.value}</p>
               )}
               <p className="text-gray-500 dark:text-gray-300">{card.label}</p>
             </div>

@@ -75,6 +75,7 @@ export default function TabelaPedidosdeAssistencia({
   const [chamadosFiltrados, setChamadosFiltrados] = useState<Chamados[]>(pedidos);
 
   async function getpedidos() {
+    /*
     setLoadingTabela(true);
     try {
       const response = await fetch(`/api/pedidos`, {
@@ -99,6 +100,7 @@ export default function TabelaPedidosdeAssistencia({
     } finally {
       setLoadingTabela(false);
     }
+      */
   }
 
   useEffect(() => {
@@ -129,7 +131,7 @@ export default function TabelaPedidosdeAssistencia({
         <div className="flex flex-wrap sm:flex-nowrap dark:border-white items-center gap-2 w-full justify-start">
           <Button
             onClick={() => selecionarModulo("vazio")}
-            className="block sm:hidden w-auto bg-[#13678A] hover:bg-[#178FB5] text-white"
+            className="block sm:hidden w-auto bg-[#13678A] hover:bg-[#178FB5]"
           >
             <ArrowDownToLine />
           </Button>
@@ -145,7 +147,7 @@ export default function TabelaPedidosdeAssistencia({
           </Button>
 
           <select
-            className="min-w-[150px] bg-white text-black border border-[#303030] rounded-md px-2 py-2 text-gray-200 focus:ring-[#13678A] focus:border-[#13678A]"
+            className="min-w-[150px] bg-white text-black border border-[#303030] rounded-md px-2 py-2 focus:ring-[#13678A] focus:border-[#13678A] bg-white dark:bg-gray-800 dark:text-gray-200 dark:border-white"
             value={filtroStatus}
             onChange={(e) => setFiltroStatus(e.target.value)}
           >
@@ -166,9 +168,8 @@ export default function TabelaPedidosdeAssistencia({
               if (erropesquisarChamado) setErropesquisarChamado(null);
             }}
             placeholder="Digite o código ou cliente"
-            className={`w-full min-w-[500px] bg-white text-gray-200 border border-[#303030] focus:border-[#13678A] focus:ring-[#13678A] ${
-              erropesquisarChamado ? "border-red-500 focus:ring-red-500" : ""
-            }`}
+            className={`w-full min-w-[700px] bg-white text-gray-200 border dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] border-[#303030] focus:border-[#13678A] focus:ring-[#13678A] ${erropesquisarChamado ? "border-red-500 focus:ring-red-500" : ""
+              }`}
           />
           <Button
             onClick={() => getpedidos()}
@@ -180,7 +181,7 @@ export default function TabelaPedidosdeAssistencia({
       </Card>
 
       {/* TABELA */}
-      <Card className="w-full dark:bg-gray-900 dark:border-white p-2 gap-2 bg-white border-black text-gray-200 flex-1 overflow-hidden">
+      <Card className="w-full dark:bg-gray-900 dark:border-white p-2 gap-2 bg-white border-black flex-1 overflow-hidden">
         {loadingTabela ? (
           <p className="text-center p-4">Carregando...</p>
         ) : errorTabela ? (
@@ -189,27 +190,28 @@ export default function TabelaPedidosdeAssistencia({
           <p className="text-center p-4">Nenhum produto encontrado</p>
         ) : (
           <div className="overflow-auto dark:bg-gray-900 h-full">
-            <table className="min-w-full dark:bg-gray-900 border-collapse text-gray-200">
-              <thead className="sticky top-0 bg-white dark:bg-gray-900 z-10 text-[#13678A] uppercase">
+            <table className="min-w-full dark:bg-gray-900 border-collapse">
+              <thead className="sticky top-0 dark:bg-gray-900 z-10">
                 <tr>
-                  <th className="dark:bg-gray-900 p-2 text-center">Chamado</th>
-                  <th className="dark:bg-gray-900 p-2 text-center">Cliente</th>
-                  <th className="dark:bg-gray-900 p-2 text-center">Produto</th>
-                  <th className="dark:bg-gray-900 p-2 text-center">Status</th>
-                  <th className="dark:bg-gray-900 p-2 text-center">Visualizar</th>
+                  <th className="p-2 text-center">Chamado</th>
+                  <th className="p-2 text-center">Cliente</th>
+                  <th className="p-2 text-center">Produto</th>
+                  <th className="p-2 text-center">Status</th>
+                  <th className="p-2 text-center">Visualizar</th>
                 </tr>
               </thead>
+
               <tbody>
                 {chamadosFiltrados.map((user) => (
                   <tr
                     key={user.id}
-                    className="hover:bg-white transition-colors"
+                    className="odd:bg-white even:bg-gray-100 dark:odd:bg-gray-900 dark:even:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                   >
-                    <td className="dark:bg-gray-900 bg-white p-2 text-center">{user.id}</td>
-                    <td className="dark:bg-gray-900 bg-white p-2 text-center">{user.nomeCliente}</td>
-                    <td className="dark:bg-gray-900 bg-white p-2 text-center">{user.produto}</td>
-                    <td className="dark:bg-gray-900 bg-white p-2 text-center">{user.status}</td>
-                    <td className="dark:bg-gray-900 bg-white p-2 text-center">
+                    <td className="p-2 text-center">{user.id}</td>
+                    <td className="p-2 text-center">{user.nomeCliente}</td>
+                    <td className="p-2 text-center">{user.produto}</td>
+                    <td className="p-2 text-center">{user.status}</td>
+                    <td className="p-2 text-center">
                       <Button
                         className="bg-[#13678A] hover:bg-[#178FB5] text-white px-3 py-1"
                         onClick={() => {

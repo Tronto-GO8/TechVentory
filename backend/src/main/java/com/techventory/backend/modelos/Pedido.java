@@ -15,8 +15,8 @@ public class Pedido {
     private UUID idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
-    private Usuario cliente;
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_pedido", nullable = false)
@@ -57,13 +57,11 @@ public class Pedido {
         this.idPedido = idPedido;
     }
 
-    public Usuario getCliente() {
-        return cliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCliente(Usuario cliente) {
-        this.cliente = cliente;
-    }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
     public Date getDataPedido() {
         return dataPedido;

@@ -52,9 +52,9 @@ export default function ModalDadosUsuario({ setMostrarDados, idCliente }: ModalP
         estado: "SP",
         cep: "04567-890",
         numeroChamados: "5",
-        totalPedido: 12,
+        totalPedido: 2,
         totalGasto: 3478.50,
-        totalChamados: 5
+        totalChamados: 1
     }
 
     const compraExemplo = {
@@ -65,18 +65,19 @@ export default function ModalDadosUsuario({ setMostrarDados, idCliente }: ModalP
         Data: "10/11/2024",
     }
 
+    const compraExemplo1 = {
+        Produto: "Tablet",
+        Quantidade: 2,
+        valor: 5700.00,
+        Canal: "Na loja",
+        Data: "8/7/2024",
+    }
+
     const [abaAtiva, setAbaAtiva] = useState<"informacoes" | "pedidos">("informacoes");
     const [cliente, setCliente] = useState<any>(usuarioExemplo);
     const [camprasDoCliente, setCamprasDoCliente] = useState<ComprasCliente[]>([
         compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
-        compraExemplo,
+        compraExemplo1,
     ]);
     const [loading, setLoading] = useState(false);
     const [erro, setErro] = useState<string | null>(null);
@@ -131,7 +132,7 @@ export default function ModalDadosUsuario({ setMostrarDados, idCliente }: ModalP
 
     return (
         <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30">
-            <div className="bg-white w-[90vw] sm:w-[70vw] md:w-[50vw] h-[70vh] md:h-[70vh] rounded shadow-lg">
+            <div className="bg-white w-[90vw] sm:w-[70vw] md:w-[50vw] h-[70vh] md:h-[70vh] rounded shadow-lg dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030]">
                 <div className="flex flex-col h-full gap-2">
                     <div className="relative w-full flex-row p-3">
                         <Button onClick={() => { setMostrarDados(false) }} className="absolute top-1 right-1 text-xl">X</Button>
@@ -203,7 +204,7 @@ export default function ModalDadosUsuario({ setMostrarDados, idCliente }: ModalP
                                                     <Card className="flex-1 border border-black overflow-hidden">
                                                         <div className="overflow-auto h-full">
                                                             <table className="min-w-full border-collapse">
-                                                                <thead className="sticky top-0 bg-white z-10">
+                                                                <thead className="sticky top-0 dark:bg-gray-900 bg-white z-10">
                                                                     <tr>
                                                                         <th className="p-2 text-center">Produto</th>
                                                                         <th className="p-2 text-center">Quantidade</th>

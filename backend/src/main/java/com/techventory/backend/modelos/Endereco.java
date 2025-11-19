@@ -31,8 +31,7 @@ public class Endereco {
     private String estado;
 
     // --- Relação com Usuario ---
-    @OneToOne
-    @JoinColumn(name = "id_usuario", referencedColumnName = "idUsuario")
+    @OneToOne(mappedBy = "endereco")
     private Usuario usuario;
 
     // --- Getters e Setters ---
