@@ -10,6 +10,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long  idUsuario;
 
     private String nome;
@@ -23,8 +24,24 @@ public class Usuario {
 
     private String imagemUsuario;
 
+    private String telefone;
+
     // Campo para saber se veio do Google ou é normal
     private String tipoLogin; // "GOOGLE" ou "LOCAL"
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
+
+    // geters e setters
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
     public String getTipoLogin() {
         return tipoLogin;
@@ -82,8 +99,6 @@ public class Usuario {
     public void setImagemUsuario(String imagemUsuario) {
         this.imagemUsuario = imagemUsuario;
     }
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Endereco endereco;
 
     public Endereco getEndereco() {
         return endereco;

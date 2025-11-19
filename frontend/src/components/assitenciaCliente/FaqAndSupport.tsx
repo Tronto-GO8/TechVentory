@@ -37,13 +37,13 @@ export default function BarraDeAssistencia({ onQuickReply }: BarraDeAssistenciaP
   return (
     <>
       <nav
-        className={`bg-white ${
+        className={`bg-white dark:bg-gray-900 dark:border-white ${
           chatMenu ? "absolute left-0 max-h-[calc(100vh-80px)] z-20" : "flex"
         } h-full lg:mt-5 max-h-[calc(100vh-101px)]`}
       >
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full dark:bg-gray-900 dark:border-white">
           {/* Botão do menu (visível apenas no mobile) */}
-          <div className="lg:hidden w-full">
+          <div className="lg:hidden w-full  dark:bg-gray-900 dark:border-white">
             <Button
               className="mt-2 ml-2"
               onClick={() => setMenuOpen(!chatMenu)}
@@ -54,14 +54,14 @@ export default function BarraDeAssistencia({ onQuickReply }: BarraDeAssistenciaP
 
           {/* Conteúdo da barra lateral */}
           <div
-            className={`flex flex-col pt-4 h-full ${
+            className={`flex flex-col pt-4 h-full  dark:bg-gray-900 dark:border-white ${
               chatMenu ? "" : "hidden"
             }`}
           >
             <div
               className="min-w-0 grid grid-rows-[39%_35%_20%] gap-y-4 
                          w-full max-w-[60vw] h-full relative px-4 
-                         overflow-y-auto lg:max-w-[30vw] bg-white"
+                         overflow-y-auto lg:max-w-[30vw] bg-white  dark:bg-gray-900 dark:border-white"
             >
               {/* Seção — Sugestões rápidas */}
               <Card className="flex flex-col gap-4 p-4 w-full max-w-full flex-shrink-0">

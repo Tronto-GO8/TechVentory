@@ -200,7 +200,7 @@ export default function TabelaFuncionarios({
                 if (erroPesquisarFuncionario) setErroPesquisarFuncionario(null);
               }}
               placeholder="Digite o ID ou nome"
-              className={`w-full dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] min-w-[500px] ${
+              className={`w-full dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] min-w-[700px] ${
                 erroPesquisarFuncionario ? "border-red-500 focus:ring-red-500" : ""
               }`}
             />

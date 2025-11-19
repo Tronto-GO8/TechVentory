@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 public class Categoria {
 
+
     @Id
     @GeneratedValue
     private Long idCategoria;
@@ -15,8 +16,14 @@ public class Categoria {
     private String nome;
 
     @ManyToMany(mappedBy = "categorias")
-    @JsonBackReference // 👈 evita loop reverso
+    @JsonBackReference
     private Set<Produto> produtos = new HashSet<>();
+
+    public Categoria() {} // construtor obrigatório JPA
+
+    public Categoria(String nome) {
+        this.nome = nome;
+    }
 
     // Getters e Setters
     public Long getIdCategoria() { return idCategoria; }

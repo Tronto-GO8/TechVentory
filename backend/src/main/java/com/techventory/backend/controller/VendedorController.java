@@ -5,9 +5,11 @@ import com.techventory.backend.modelos.Usuario;
 import com.techventory.backend.modelos.Vendedor;
 import com.techventory.backend.repositorio.UsuarioRepository;
 import com.techventory.backend.repositorio.VendedorRepository;
+import com.techventory.backend.servicos.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,11 +19,12 @@ public class VendedorController {
 
     private final UsuarioRepository usuarioRepository;
     private final VendedorRepository vendedorRepository;
+    private final UsuarioService usuarioService;
 
-    public VendedorController(UsuarioRepository usuarioRepository,
-                              VendedorRepository vendedorRepository) {
+    public VendedorController(UsuarioRepository usuarioRepository, VendedorRepository vendedorRepository, UsuarioService usuarioService) {
         this.usuarioRepository = usuarioRepository;
         this.vendedorRepository = vendedorRepository;
+        this.usuarioService = usuarioService;
     }
 
     @PostMapping("/promover")
@@ -45,4 +48,19 @@ public class VendedorController {
                 "vendedor", vendedor
         ));
     }
+
+    @GetMapping("{vendedorId}")
+    public ResponseEntity<List<Usuario>> getClientesPorVendedor(
+            @PathVariable Long vendedorId,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) Long idCliente
+    ) {
+        List<Usuario> clientes = usuarioService.buscarClientesDoVendedor(
+                vendedorId, email, idCliente
+        );
+        return ResponseEntity.ok(clientes);
+    }
+
+
+
 }

@@ -7,7 +7,65 @@ export default function MeusPedidos() {
   const [loading, setLoading] = useState(true);
   const token = "TOKEN_DO_USUARIO_AQUI";
 
+  useEffect(() => {
+  // MODO APRESENTAÇÃO — sem backend
+  const pedidosFake: Order[] = [
+  {
+    id: "XPL_AT32",
+    data: "2024-10-11",
+    valorTotal: 349.80,
+    status: "Entregue",
+    itens: [
+      { nome: "Teclado Mecânico RGB", quantidade: 1, preco: 199.90 },
+      { nome: "Mouse Gamer 7200 DPI", quantidade: 1, preco: 149.90 },
+    ],
+  },
+  {
+    id: "KMZ23DF",
+    data: "2024-10-11",
+    valorTotal: 89.90,
+    status: "Preparando",
+    itens: [
+      { nome: "Mousepad XXL", quantidade: 1, preco: 89.90 },
+    ],
+  },
+  {
+    id: "AMB649F",
+    data: "2024-10-11",
+    valorTotal: 499.70,
+    status: "Aguardando pagamento",
+    itens: [
+      { nome: "Headset Surround 7.1", quantidade: 1, preco: 299.90 },
+      { nome: "Suporte de Headset", quantidade: 1, preco: 49.90 },
+      { nome: "Cabo USB-C Reforçado", quantidade: 1, preco: 149.90 },
+    ],
+  },
+  {
+    id: "63RKO3",
+    data: "2024-10-12",
+    valorTotal: 239.80,
+    status: "Em trânsito",
+    itens: [
+      { nome: "Webcam Full HD", quantidade: 1, preco: 139.90 },
+      { nome: "Luz de mesa LED", quantidade: 1, preco: 99.90 },
+    ],
+  },
+  {
+    id: "HGMP43",
+    data: "2024-10-12",
+    valorTotal: 129.90,
+    status: "Cancelado",
+    itens: [
+      { nome: "Carregador Turbo 30W", quantidade: 1, preco: 129.90 },
+    ],
+  },
+];
 
+  setPedidos(pedidosFake);
+  setLoading(false);
+}, []);
+
+/*
   useEffect(() => {
     async function carregarPedidos() {
       try {
@@ -22,7 +80,7 @@ export default function MeusPedidos() {
 
     carregarPedidos();
   }, [token]);
-
+*/
   if (loading) return <p>Carregando...</p>;
 
 
@@ -48,7 +106,7 @@ export default function MeusPedidos() {
              
                 <div>
                   <h3 className="text-lg text-gray-800 dark:text-gray-200">
-                    Pedido #{pedido.id}
+                    Pedido {pedido.id}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {new Date(pedido.data).toLocaleDateString("pt-BR")}

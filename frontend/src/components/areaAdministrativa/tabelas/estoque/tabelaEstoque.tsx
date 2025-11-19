@@ -41,7 +41,7 @@ export default function TabelaEstoque({
     {
       id: 1,
       produto: "Notebook Gamer X-15",
-      categorias: ["Informática", "Gamer"],
+      categorias: ["Informática", "Notebook"],
       preco: 6499.9,
       estoque: 12,
       estoqueMinimo: 5,
@@ -54,10 +54,46 @@ export default function TabelaEstoque({
       estoque: 3,
       estoqueMinimo: 5,
     },
+    {
+      id: 3,
+      produto: "Mouse Wireless",
+      categorias: ["Informática", "Acessórios"],
+      preco: 129.9,
+      estoque: 20,
+      estoqueMinimo: 5,
+    },
+    {
+      id: 4,
+      produto: "Teclado Mecânico RGB",
+      categorias: ["Informática", "Gamer"],
+      preco: 349.9,
+      estoque: 8,
+      estoqueMinimo: 5,
+    },
+    {
+      id: 5,
+      produto: "Tênis Esportivo",
+      categorias: ["Moda", "Esporte"],
+      preco: 199.9,
+      estoque: 15,
+      estoqueMinimo: 10,
+    },
+    {
+      id: 6,
+      produto: "Smartphone X200",
+      categorias: ["Eletrônicos", "Celulares"],
+      preco: 2899.9,
+      estoque: 25,
+      estoqueMinimo: 10,
+    },
   ]);
   const [produtosFiltrados, setProdutosFiltrados] = useState<Itens[]>(produtos);
 
+
+
   async function getProdutos() {
+
+    /*
     setLoadingTabela(true);
     try {
       const response = await fetch(`/api/produtos`, {
@@ -84,13 +120,19 @@ export default function TabelaEstoque({
     } finally {
       setLoadingTabela(false);
     }
+
+    */
   }
+
 
   useEffect(() => {
     getProdutos();
   }, []);
 
+
+
   async function getDadosNome() {
+    /*
     if (!pesquisa.trim()) {
       setErroPesquisa(null);
       setProdutosFiltrados(produtos);
@@ -120,7 +162,7 @@ export default function TabelaEstoque({
       }
     } finally {
       setLoadingTabela(false);
-    }
+    }*/
   }
 
   useEffect(() => {
@@ -176,8 +218,8 @@ export default function TabelaEstoque({
               + Adicionar
             </Button>
 
-            <div className="max-w-[140px]">
-              <FiltroItens value={filtroCategoria}onChange={setFiltroCategoria} />
+            <div className="max-w-[140px] text-black">
+              <FiltroItens value={filtroCategoria} onChange={setFiltroCategoria} />
             </div>
 
             <div>
@@ -195,11 +237,11 @@ export default function TabelaEstoque({
             </div>
           </div>
 
-          <div className="flex flex-row flex-1 gap-2 justify-end w-full sm:w-auto">
+          <div className="flex flex-row flex-1 gap-2 justify-end w-full sm:w-auto border border-black">
             <Input
               onChange={(event) => setPesquisa(event.target.value)}
               placeholder="Pesquisar produto"
-              className="w-full sm:w-[60%] md:w-[50%] dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] min-w-[180px]"
+              className="w-full sm:w-[60%] md:w-[50%] dark:bg-[#202020] dark:text-gray-200 dark:border-[#303030] min-w-[700px]"
             />
             <Button onClick={getDadosNome} className="w-auto bg-[#13678A] hover:bg-[#0F4F6C] text-white">
               <Search />
@@ -208,9 +250,8 @@ export default function TabelaEstoque({
         </Card>
 
         <Card
-          className={`w-full p-2 gap-2 border border-black dark:border-white dark:bg-gray-900 flex-1 overflow-hidden ${
-            loadingTabela || errorTabela ? "flex justify-center items-center" : ""
-          }`}
+          className={`w-full p-2 gap-2 border border-black dark:border-white dark:bg-gray-900 flex-1 overflow-hidden ${loadingTabela || errorTabela ? "flex justify-center items-center" : ""
+            }`}
         >
           {loadingTabela ? (
             <p className="text-center p-4">Carregando...</p>
@@ -220,7 +261,7 @@ export default function TabelaEstoque({
             <p className="text-center p-4">Nenhum produto encontrado</p>
           ) : (
             <div className="overflow-auto dark:bg-gray-900 h-full">
-              <table className="min-w-full dark:bg-gray-900 border-collapse">
+              <table className="min-w-full dark:bg-gray-900 border-collapse table-auto">
                 <thead className="sticky top-0 bg-white dark:bg-gray-900 z-10">
                   <tr>
                     <th className="p-2 text-center dark:text-gray-200">Produto</th>
@@ -236,8 +277,8 @@ export default function TabelaEstoque({
                       key={user.id}
                       className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800"
                     >
-                      <td className="p-2 text-center dark:text-gray-200">{user.produto}</td>
-                      <td className="p-2 text-center dark:text-gray-200">
+                      <td className="p-2 text-center dark:text-gray-200 bg-[inherit]">{user.produto}</td>
+                      <td className="p-2 text-center dark:text-gray-200 bg-[inherit]">
                         {user.categorias[0]}
                         {user.categorias.length > 1 && (
                           <span className="text-gray-500 dark:text-black">
@@ -245,13 +286,13 @@ export default function TabelaEstoque({
                           </span>
                         )}
                       </td>
-                      <td className="p-2 text-center dark:text-gray-200">
+                      <td className="p-2 text-center dark:text-gray-200 bg-[inherit]">
                         R$ {user.preco.toFixed(2)}
                       </td>
-                      <td className="p-2 text-center dark:text-gray-200">
+                      <td className="p-2 text-center dark:text-gray-200 bg-[inherit]">
                         {user.estoque}
                       </td>
-                      <td className="p-2 text-center">
+                      <td className="p-2 text-center bg-[inherit]">
                         <div className="flex gap-2 justify-center">
                           <Button
                             className="bg-[#13678A] hover:bg-[#0F4F6C] text-white"
@@ -275,6 +316,7 @@ export default function TabelaEstoque({
                   ))}
                 </tbody>
               </table>
+
             </div>
           )}
         </Card>

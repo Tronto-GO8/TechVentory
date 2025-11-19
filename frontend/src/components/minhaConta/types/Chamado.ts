@@ -1,5 +1,5 @@
 export interface Chamado {
-  id: number;
+   id: number | string; 
   titulo: string;
   descricao?: string;
   dataAbertura: string;

@@ -9,7 +9,7 @@ export interface Endereco {
 }
 
 export interface User {
-  id?: number;
+  id_usuario?: number;
   nome: string;
   email: string;
   cpf: string;

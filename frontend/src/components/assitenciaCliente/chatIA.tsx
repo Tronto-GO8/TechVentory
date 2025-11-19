@@ -74,7 +74,7 @@ export default function ChatIa({ preMessages, setPreMessages }: ChatIaProps) {
 
   return (
     <div className="flex justify-end">
-      <div className="m-4 mr-10 lg:mt-9 w-full max-w-[95vw] lg:mr-28 sm:max-w-[85vw] md:max-w-[90vw] lg:max-w-[55vw] h-[85vh] overflow-hidden flex flex-col border rounded-lg shadow-lg bg-white">
+      <div className="m-4 mr-10 lg:mt-9 w-full max-w-[95vw] lg:mr-28 sm:max-w-[85vw] md:max-w-[90vw] lg:max-w-[55vw] h-[85vh] overflow-hidden flex flex-col border rounded-lg shadow-lg bg-white dark:bg-gray-900 dark:border-white">
         {/* Área de mensagens */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2">
           {!chatStarted ? (

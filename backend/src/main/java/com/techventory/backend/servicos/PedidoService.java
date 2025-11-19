@@ -4,6 +4,7 @@ import com.techventory.backend.modelos.*;
 import com.techventory.backend.repositorio.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -27,37 +28,40 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido criarPedido(Long idCliente, List<ItemPedido> itens, String metodoPagamento) {
-        Usuario cliente = usuarioRepository.findById(idCliente)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+    public Pedido criarPedido(Long idUsuario, List<ItemPedido> itens, String metodoPagamento) {
+
+        // agora buscamos "usuario", não mais "cliente"
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
 
         Pedido pedido = new Pedido();
-        pedido.setCliente(cliente);
+        pedido.setUsuario(usuario); // antes: setCliente()
         pedido.setStatus("PENDENTE");
         pedido.setMetodoPagamento(metodoPagamento);
         pedido.setDataPedido(new Date());
 
-        BigDecimal total = BigDecimal.ZERO; // ← usa BigDecimal agora
+        BigDecimal total = BigDecimal.ZERO;
 
         for (ItemPedido item : itens) {
             Produto produto = produtoRepository.findById(item.getProduto().getIdProduto())
                     .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
 
             item.setProduto(produto);
-            item.setPrecoUnitario(produto.getPrecoUnitario());
+            item.setPrecoUnitario(produto.getPreco());
             item.setPedido(pedido);
-            total = total.add(item.getSubtotal()); // ← usa add() em vez de +
+
+            total = total.add(item.getSubtotal());
         }
 
         pedido.setValorTotal(total);
         pedido.getItens().addAll(itens);
 
-        // Salva tudo em cascata
         return pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> listarPedidosDoCliente(Long idCliente) {
-        return pedidoRepository.findByCliente_IdUsuario(idCliente);
+    public List<Pedido> listarPedidosDoUsuario(Long idUsuario) {
+        // antes: findByCliente_IdUsuario
+        return pedidoRepository.findByUsuario_IdUsuario(idUsuario);
     }
 
     public Optional<Pedido> buscarPorId(UUID idPedido) {
@@ -70,4 +74,5 @@ public class PedidoService {
         pedido.setStatus(novoStatus);
         pedidoRepository.save(pedido);
     }
+
 }

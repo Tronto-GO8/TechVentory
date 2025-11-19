@@ -5,7 +5,7 @@ export interface OrderItem {
 }
 
 export interface Order {
-  id: number;
+  id: number | string;
   data: string;
   itens: OrderItem[];
   valorTotal: number;

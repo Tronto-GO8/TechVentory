@@ -8,6 +8,34 @@ export default function MeusChamados() {
   const [loading, setLoading] = useState(true);
   const token = "TOKEN_DO_USUARIO_AQUI";
 
+
+  useEffect(() => {
+  // 🔧 MODO APRESENTAÇÃO — sem backend
+  const chamadosFake: Chamado[] = [
+    {
+      id: "CHM_001",
+      titulo: "Troca de tela",
+      dataAbertura: "2024-11-10",
+      status: "em_analise",
+    },
+    {
+      id: "CHM_002",
+      titulo: "Problema no carregador",
+      dataAbertura: "2024-11-15",
+      status: "concertado",
+    },
+    {
+      id: "CHM_003",
+      titulo: "Notebook não liga",
+      dataAbertura: "2024-11-20",
+      status: "cancelado",
+    },
+  ];
+
+  setChamados(chamadosFake);
+  setLoading(false);
+}, []);
+/*
   useEffect(() => {
     async function carregarChamados() {
       try {
@@ -22,6 +50,8 @@ export default function MeusChamados() {
 
     carregarChamados();
   }, [token]);
+
+  */
 
   const chamadosFiltrados = chamados.filter((chamado) => {
     if (filtroStatus === "") return true;

@@ -15,7 +15,7 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "id_vendedor", nullable = false)
-    private Usuario vendedor;
+    private Vendedor vendedor;
 
     @Column(nullable = false)
     private String nome;
@@ -27,7 +27,10 @@ public class Produto {
     private int quantidade;
 
     @Column(nullable = false)
-    private BigDecimal precoUnitario;
+    private BigDecimal preco;
+
+    @Column(nullable = false)
+    private Integer quantidadeMinima;
 
     // Produto pode ter até 6 imagens
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,12 +40,23 @@ public class Produto {
     @ManyToMany
     @JoinTable(
             name = "produto_categoria",
-            joinColumns = @JoinColumn(name = "id_produto"),
-            inverseJoinColumns = @JoinColumn(name = "id_categoria")
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<Categoria> categorias = new HashSet<>();
 
+
     // Getters e Setters
+
+
+    public Integer getQuantidadeMinima() {
+        return quantidadeMinima;
+    }
+
+    public void setQuantidadeMinima(Integer quantidadeMinima) {
+        this.quantidadeMinima = quantidadeMinima;
+    }
+
     public Long getIdProduto() {
         return idProduto;
     }
@@ -51,11 +65,11 @@ public class Produto {
         this.idProduto = idProduto;
     }
 
-    public Usuario getVendedor() {
+    public Vendedor getVendedor() {
         return vendedor;
     }
 
-    public void setVendedor(Usuario vendedor) {
+    public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
 
@@ -83,12 +97,12 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public BigDecimal getPrecoUnitario() {
-        return precoUnitario;
+    public BigDecimal getPreco() {
+        return preco;
     }
 
-    public void setPrecoUnitario(BigDecimal precoUnitario) {
-        this.precoUnitario = precoUnitario;
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 
     public List<ImagemProduto> getImagemProduto() {
@@ -102,7 +116,6 @@ public class Produto {
     public Set<Categoria> getCategorias() {
         return categorias;
     }
-
     public void setCategorias(Set<Categoria> categorias) {
         this.categorias = categorias;
     }
