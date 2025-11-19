@@ -4,6 +4,7 @@ import type {
   PaymentMethod as PaymentMethodType,
 } from "@/type/ProdutosType";
 import { useMemo } from "react";
+import { CardData } from "../CartaoForm";
 
 interface CheckoutConfirmarVoltarBtnProps {
   onOpenChange: (open: boolean) => void;
@@ -11,6 +12,7 @@ interface CheckoutConfirmarVoltarBtnProps {
   selectedPayment: PaymentMethodType | null;
   shippingMethod: "pickup" | "shipping";
   address: Address | null;
+  cardData?: CardData | null;
 }
 
 export default function CheckoutConfirmarVoltarBtn({
@@ -19,17 +21,31 @@ export default function CheckoutConfirmarVoltarBtn({
   selectedPayment,
   shippingMethod,
   address,
+  cardData,
 }: CheckoutConfirmarVoltarBtnProps) {
+  const isCreditOrDebit =
+    selectedPayment === "credit" || selectedPayment === "debit";
+
   const canConfirm = useMemo(() => {
     if (!selectedPayment) return false;
     if (shippingMethod === "shipping" && !address) return false;
+    // quando for cartão, exige cardData (form já validado antes de setar)
+    if (isCreditOrDebit && !cardData) return false;
     return true;
-  }, [selectedPayment, shippingMethod, address]);
+  }, [selectedPayment, shippingMethod, address, isCreditOrDebit, cardData]);
 
   const handleConfirm = () => {
     if (!canConfirm) return;
     onConfirm();
   };
+
+  const buttonLabel = useMemo(() => {
+    if (!selectedPayment) return "Selecione o pagamento";
+    if (shippingMethod === "shipping" && !address)
+      return "Adicione um endereço";
+    if (isCreditOrDebit && !cardData) return "Preencha os dados do cartão";
+    return "Confirmar Compra";
+  }, [selectedPayment, shippingMethod, address, isCreditOrDebit, cardData]);
 
   return (
     <div className="flex flex-col-reverse md:flex-row gap-3 pt-4">
@@ -46,11 +62,7 @@ export default function CheckoutConfirmarVoltarBtn({
         disabled={!canConfirm}
         onClick={handleConfirm}
       >
-        {!selectedPayment
-          ? "Selecione o pagamento"
-          : shippingMethod === "shipping" && !address
-          ? "Adicione um endereço"
-          : "Confirmar Compra"}
+        {buttonLabel}
       </Button>
     </div>
   );
