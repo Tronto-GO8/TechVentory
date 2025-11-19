@@ -6,7 +6,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import OuSeparador from "@/components/ui/OuSeparador";
 import type {
   CartItem,
@@ -22,6 +21,7 @@ import { Pagamento } from "./Pagamento";
 import CardEnderecoDeEntrega from "./sessaoEndereco/CardEnderecoDeEntrega";
 import OpcoesDeEntrega from "./sessaoEndereco/OpcoesDeEntrega";
 import EnderecoHeader from "./sessaoEndereco/EnderecoHeader";
+import { CartaoForm, type CardData } from "../CartaoForm";
 
 interface CheckoutModalProps {
   open: boolean;
@@ -58,8 +58,9 @@ export function CheckoutCarrinho({
   onConfirmPurchase,
 }: CheckoutModalProps) {
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [cardData, setCardData] = useState<CardData | undefined>(undefined);
+  const [cardAccepted, setCardAccepted] = useState(false); // novo estado
 
-  // subtotal (local, apenas para exibir no modal)
   const subtotal = useMemo(() => {
     return items.reduce((acc, it) => {
       const qty = (it as any).quantity ?? (it as any).quantidade ?? 1;
@@ -68,9 +69,21 @@ export function CheckoutCarrinho({
     }, 0);
   }, [items]);
 
+  const cartaoSelecionado =
+    selectedPayment === "credit" || selectedPayment === "debit";
+
   const handleAddressSubmit = (newAddress: Address) => {
     onAddressUpdate(newAddress);
     setIsEditingAddress(false);
+  };
+
+  const handleCartaoSubmit = (dados: CardData) => {
+    setCardData(dados);
+    setCardAccepted(true);
+  };
+
+  const handleCartaoBlurChange = (dados: CardData) => {
+    setCardData(dados);
   };
 
   return (
@@ -155,6 +168,57 @@ export function CheckoutCarrinho({
             onSelectMethod={onPaymentSelect}
           />
 
+          {cartaoSelecionado && !cardAccepted && (
+            <>
+              <OuSeparador />
+              <div className="border-t border-zinc-700 pt-6">
+                <h3 className="font-semibold text-lg text-zinc-50 mb-4">
+                  Dados do Cartão
+                </h3>
+
+                <CartaoForm
+                  defaultValue={cardData}
+                  onSubmit={handleCartaoSubmit}
+                  onBlurChange={handleCartaoBlurChange}
+                />
+              </div>
+            </>
+          )}
+
+          {cartaoSelecionado && cardAccepted && cardData && (
+            <>
+              <OuSeparador />
+              <div className="border-t border-zinc-700 pt-6">
+                <h3 className="font-semibold text-lg text-zinc-50 mb-2">
+                  Cartão selecionado
+                </h3>
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-zinc-400">
+                      {cardData.name ?? "—"}
+                    </p>
+                    <p className="font-medium text-zinc-50 mt-1">
+                      **** **** **** {cardData.number.slice(-4)}
+                    </p>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      Validade: {cardData.expiry}
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-zinc-700 bg-transparent"
+                      onClick={() => setCardAccepted(false)}
+                    >
+                      Editar
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
           <OuSeparador />
 
           {/* Order Summary */}
@@ -172,6 +236,7 @@ export function CheckoutCarrinho({
             selectedPayment={selectedPayment}
             shippingMethod={shippingMethod}
             address={address}
+            cardData={cardData ?? null}
           />
         </div>
       </DialogContent>

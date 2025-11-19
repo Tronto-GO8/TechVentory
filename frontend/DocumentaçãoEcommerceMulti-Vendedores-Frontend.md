@@ -519,28 +519,26 @@ Carrinho
 
 7. CheckoutCarrinho (src/components/carrinho/checkout/CheckoutCarrinho.tsx)
 
-   - Modal principal do checkout
-   - Gerencia estado de edição de endereço
-   - Seções:
-     - Resumo de produtos
-     - Endereço/frete
-     - Método de pagamento
-     - Sumário do pedido
-   - Props:
-     - `items`: produtos no carrinho
-     - `address`: endereço selecionado
-     - `selectedPayment`: método de pagamento
-     - `shippingMethod`: tipo de entrega
-     - Handlers para atualização de cada seção
+   - Integra CartaoForm apenas quando método selecionado é crédito ou débito.
+   - Mantém dois estados:
+     - cardData: CardData | undefined — dados limpos do cartão.
+     - cardAccepted: boolean — indica se o formulário foi aceito (fechado e resumo mostrado).
+   - Fluxo:
+     - Ao selecionar método cartão: exibe CartaoForm.
+     - Ao submeter CartaoForm válido: handleCartaoSubmit guarda cardData e seta cardAccepted = true — CartaoForm some e aparece um resumo mascarado.
+     - Quando cardAccepted e cardData presentes: mostra resumo com nome, últimas 4 do cartão e validade; botão "Editar" volta ao formulário.
+   - Valida endereço para frete: exige address se shippingMethod === "shipping".
+   - Passa cardData para CheckoutConfirmarVoltarBtn para habilitar confirmação.
 
 8. CheckoutConfirmarVoltarBtn (src/components/carrinho/checkout/CheckoutConfirmarVoltarBtn.tsx)
 
-   - Controle de ações do checkout
-   - Valida se pode confirmar compra:
-     - Pagamento selecionado
-     - Endereço preenchido (se frete)
-   - Botões "Voltar ao Carrinho" e "Confirmar Compra"
-   - Texto do botão principal muda conforme estado
+   - Lógica para habilitar botão de confirmação:
+     - Requer selectedPayment.
+     - Se shippingMethod === "shipping" requer address.
+     - Se método for "credit" ou "debit" requer cardData (o formulário já foi validado antes de fechar).
+   - Texto do botão principal muda conforme estado:
+     - "Selecione o pagamento", "Adicione um endereço", "Preencha os dados do cartão" ou "Confirmar Compra".
+   - onConfirm é chamado apenas se condições atendidas.
 
 9. CheckoutProduto (src/components/carrinho/checkout/CheckoutProduto.tsx)
 
@@ -592,6 +590,22 @@ Carrinho
 - Configuração dos métodos disponíveis
 - Crédito, Débito, PIX, Boleto
 - Ícones do Lucide React
+
+CartaoForm (src/components/carrinho/CartaoForm.tsx)
+
+- Integra react-hook-form + zodResolver(cartaoSchema), mode: "onBlur".
+- Campos:
+  - number: input formatado (agrupa a cada 4 dígitos), aceita até 19 dígitos; maxLength do input definido para 23 (19 + espaços).
+  - name: nome no cartão.
+  - expiry: máscara MM/YY, maxLength 5.
+  - cvv: numérico, max 4 dígitos.
+  - identificationType: CPF/CNPJ (enum).
+  - identificationNumber: apenas números, limite prático 14.
+- Comportamento:
+  - Limita entradas (número, validade, cvv, documento) para evitar que o usuário digite além do permitido (inclui sanitização ao colar).
+  - Ao submeter, os dados são "limpos" (número sem espaços, documento apenas dígitos) e enviados via onSubmit.
+  - O botão "Usar cartão" só dispara onSubmit quando os dados são válidos (zodResolver impede envio inválido). Desta forma o formulário some apenas se os dados forem validados.
+  - Oferece onBlurChange para atualizar preview/estado enquanto usuário interage.
 
 Páginas
 
@@ -696,6 +710,17 @@ Schemas / Validação
   - `modalSeTornarVendedorSchema`
     nomeDaLoja: z.string().min(1).max(100)
     cnpj: preprocess que remove não-dígitos; se resultado vazio retorna undefined; valida string().regex(/^\d{14}$/).optional().
+
+cartaoSchema (src/schemas/cartaoSchema.tsx)
+
+- Validações:
+  - number: string entre 13 e 19 dígitos (sem espaços).
+  - name: mínimo 3 caracteres; apenas letras e espaços.
+  - expiry: formato MM/YY; valida mês e se não está expirado.
+  - cvv: 3 ou 4 dígitos.
+  - identificationType: enum ["CPF","CNPJ"] opcional.
+  - identificationNumber: opcional, string numérica.
+- Usado como fonte de verdade para validação do CartaoForm.
 
 Estilização
 
