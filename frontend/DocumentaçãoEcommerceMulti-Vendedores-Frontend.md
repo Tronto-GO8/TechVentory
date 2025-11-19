@@ -738,3 +738,26 @@ Rotas principais:
 - `/auth/callback` — Callback OAuth
 - `/app/*` — Área autenticada (Layout + páginas internas)
 - `/` e `*` — redirecionam para `/login` (ambiente dev config)
+- 
+A Área Administrativa é responsável pela gestão de usuários, estoque, pedidos de assistência e funcionários. Ela funciona como um painel interno, modular e responsivo, adaptado tanto para telas grandes quanto para dispositivos móveis. Toda a navegação é baseada na seleção de módulos, alteração dinâmica de layout conforme o tamanho da tela e renderização condicional das tabelas.
+
+Em termos de arquitetura, a Área Administrativa é composta pelos seguintes componentes: o componente Administracao, que controla o layout geral, o módulo selecionado e o comportamento responsivo; o PainelDeControle, que funciona como menu de módulos; o CentralTabelas, que exibe a tabela correspondente ao módulo atual; e as tabelas específicas como TabelaUsuarios, além das tabelas de Estoque, Assistência e Funcionários, que seguem o mesmo padrão estrutural e funcional.
+
+O sistema utiliza um tipo para controle dos módulos, definido como:
+type Modulos = "usuarios" | "estoque" | "assistencia" | "funcionarios" | "vazio".
+
+O fluxo de funcionamento inicia no módulo “usuarios” quando a tela possui largura suficiente para um layout expandido. Em dispositivos móveis, ao carregar a página, o módulo inicial passa a ser “vazio”, obrigando o usuário a escolher manualmente o módulo desejado. O PainelDeControle altera o estado moduloSelecionado, que então é repassado para o CentralTabelas. Cada tabela é carregada com base nesse estado e é responsável por executar suas próprias operações, incluindo pesquisa, carregamento, tratamento de erros, exibição de dados e abertura de modais.
+
+O componente Administracao controla o módulo ativo e aplica a regra de responsividade, alterando automaticamente o módulo inicial conforme o tamanho da tela. Ele também organiza o layout principal, composto pelo cabeçalho (DadosGerais), pelo menu de módulos (PainelDeControle) e pelo conteúdo dinâmico (CentralTabelas). Seus principais estados são algumModuloSelecionado, que indica se o usuário já escolheu algum módulo, e moduloSelecionado, que armazena o módulo atual.
+
+O componente PainelDeControle é responsável por permitir a troca entre os módulos. Cada botão do menu aciona uma chamada ao método selecionarModulo. Em dispositivos móveis, os botões são exibidos em coluna, enquanto em telas maiores aparecem lado a lado.
+
+O componente CentralTabelas recebe o módulo selecionado e renderiza a tabela correspondente. O mapeamento de módulos segue uma estrutura que associa cada módulo a seu respectivo componente de tabela. Quando o módulo é “vazio”, nada é renderizado. Todas as tabelas são exibidas dentro de um Card, que fornece borda e estrutura padronizada.
+
+A TabelaUsuarios é responsável por todo o processo de listagem, busca, carregamento e exibição de detalhes de usuários. Ela mantém estados internos como pesquisa, usuarios, loadingTabela, errorTabela, mostrarDadosCliente e clienteSelecionadoId. O sistema identifica automaticamente o tipo de busca com base em regras simples: pesquisas contendo arroba são tratadas como email; pesquisas compostas apenas por números são tratadas como telefone; demais entradas são tratadas como nomes. A busca é enviada à API através de uma requisição que inclui o token de autenticação no cabeçalho. O componente também é responsável por lidar com estados de erro, listas vazias e carregamentos prolongados. No modo responsivo, o campo de busca adapta seu placeholder de acordo com o tamanho da tela. A tabela utiliza cabeçalho fixo e scroll interno. O modal de detalhes é aberto quando um ID válido é selecionado.
+
+A interface Usuario define os campos esperados na listagem de usuários, incluindo id, nome, email, telefone e número de chamados. As tabelas seguem um padrão de propriedades, recebendo o módulo ativo e a função de seleção de módulo.
+
+As regras de negócio do módulo de usuários determinam que apenas usuários autenticados podem acessar o endpoint de clientes, que a pesquisa deve utilizar apenas um tipo de filtro por vez e que o modal só pode ser aberto quando um ID válido estiver disponível. Em dispositivos móveis, toda a tabela ocupa a tela inteira e inclui um botão de retorno.
+
+Este é o texto contínuo solicitado. Se quiser, posso gerar uma versão para README, PDF, apresentação ou documentação técnica com seções e títulos.
