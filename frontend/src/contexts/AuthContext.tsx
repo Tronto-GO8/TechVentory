@@ -56,14 +56,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const estaAutenticado = Boolean(localStorage.getItem(TOKEN_KEY));
 
-  useEffect(() => {
-    // sincroniza usuarioAtual do localStorage se mudar entre abas
-    const handler = () => {
-      const raw = localStorage.getItem(AUTH_USER_KEY);
-      setUsuarioAtual(raw ? JSON.parse(raw) : null);
-    };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+   useEffect(() => {
+    const users = getUsers();
+    const existeTeste = users.some((u) => u.email === "teste@teste.com");
+
+    if (!existeTeste) {
+      const novoUsuario = {
+        nome: "Usuário Teste",
+        email: "teste@teste.com",
+        senha: "123456",
+      };
+      users.push(novoUsuario);
+      setUsers(users);
+      console.log("✅ Usuário de teste criado:", novoUsuario);
+
+    }
   }, []);
 
   const login = async (email: string, senha: string) => {
