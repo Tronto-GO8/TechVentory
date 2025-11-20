@@ -41,6 +41,7 @@ public class AuthController {
                         "id", novoUsuario.getIdUsuario(),
                         "nome", novoUsuario.getNome(),
                         "email", novoUsuario.getEmail()
+
                 )
         );
     }

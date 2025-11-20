@@ -19,7 +19,7 @@ interface Chamados {
   descricao: string;
   nomeCliente: string;
   emailCliente: string;
-  telefoneCliente: number;
+  telefoneCliente: string;
 }
 
 export default function ModalDadosAssistenciaProduto({
@@ -31,14 +31,15 @@ export default function ModalDadosAssistenciaProduto({
   const [erro, setErro] = useState<string | null>(null);
   const [chamado, setChamado] = useState<Chamados>({
     id: 0,
-    produto: "",
-    status: "Na loja",
+    produto: "Notebook Gamer X-15",
+    status: "Em andamento",
     dataDoPedido: new Date(),
-    descricao: "",
-    nomeCliente: "",
-    emailCliente: "",
-    telefoneCliente: 0,
+    descricao: "depois de uma queda não liga mais",
+    nomeCliente: "Lucas Andrade",
+    emailCliente: "lucasandre65@gmail.com",
+    telefoneCliente: "1194827-3652",
   });
+
 
   const [erros, setErros] = useState({
     produto: "",
@@ -63,7 +64,7 @@ export default function ModalDadosAssistenciaProduto({
     setErros(novosErros);
     return Object.values(novosErros).every((erro) => erro === "");
   };
-
+/*
   // 🟦 Buscar dados se for edição
   useEffect(() => {
     if (!idItem) return;
@@ -89,6 +90,7 @@ export default function ModalDadosAssistenciaProduto({
     }
     getChamado();
   }, [idItem]);
+  */
 
   // 🟦 Salvar (novo ou edição)
   const salvarChamado = async () => {
@@ -118,116 +120,144 @@ export default function ModalDadosAssistenciaProduto({
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30">
-      <div className="bg-white rounded-lg shadow-lg w-[90vw] sm:w-[70vw] md:w-[50vw] h-[85vh] overflow-hidden flex flex-col">
-        <div className="flex justify-between items-center p-2">
-          <div>
-            <h2 className="text-lg font-semibold">
-              {idItem ? "Editar Chamado" : "Criar Novo Chamado"}
-            </h2>
-            <p>{idItem ? "" : "Registre um novo pedido de assistencia técnica"}</p>
-          </div>
-        </div>
-
-        <div className="h-full overflow-auto p-2 ">
-          {loading ? (
-            <p>Carregando...</p>
-          ) : erro ? (
-            <p className="text-red-500">{erro}</p>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 grid-rows-3 gap-2 p-2 rounded-md">
-                <div>
-                  <p>Produto</p>
-                  <Input
-                    value={chamado.produto}
-                    onChange={(e) => {
-                      setChamado({ ...chamado, produto: e.target.value });
-                      setErros({ ...erros, produto: "" });
-                    }}
-                  />
-                  <InputError message={erros.produto} />
-                </div>
-                <div>
-                  <p>Status</p>
-                  <select
-                    className="w-full rounded-md p-2"
-                    value={chamado.status}
-                    onChange={(e) =>
-                      setChamado({ ...chamado, status: e.target.value as Chamados["status"] })
-                    }
-                  >
-                    <option value="Na loja">Na loja</option>
-                    <option value="Fora da loja">Fora da loja</option>
-                    <option value="Em andamento">Em andamento</option>
-                    <option value="Finalizado">Finalizado</option>
-                    <option value="cancelado">Cancelado</option>
-                  </select>
-                </div>
-
-                <div>
-                  <p>Nome do Cliente</p>
-                  <Input
-                    value={chamado.nomeCliente}
-                    onChange={(e) => {
-                      setChamado({ ...chamado, nomeCliente: e.target.value });
-                      setErros({ ...erros, nomeCliente: "" });
-                    }}
-                  />
-                  <InputError message={erros.nomeCliente} />
-                </div>
-
-                <div>
-                  <p>Email do Cliente</p>
-                  <Input
-                    type="email"
-                    value={chamado.emailCliente}
-                    onChange={(e) => {
-                      setChamado({ ...chamado, emailCliente: e.target.value });
-                      setErros({ ...erros, emailCliente: "" });
-                    }}
-                  />
-                  <InputError message={erros.emailCliente} />
-                </div>
-
-                <div>
-                  <p>Telefone</p>
-                  <Input
-                    type="number"
-                    value={chamado.telefoneCliente || ""}
-                    onChange={(e) => {
-                      setChamado({ ...chamado, telefoneCliente: Number(e.target.value) });
-                      setErros({ ...erros, telefoneCliente: "" });
-                    }}
-                  />
-                  <InputError message={erros.telefoneCliente} />
-                </div>
-              </div>
-              <div className="flex flex-col h-[150px]">
-                <p>Descrição do problema</p>
-                <textarea
-                  value={chamado.descricao}
-                  onChange={(e) => {
-                    setChamado({ ...chamado, descricao: e.target.value });
-                    setErros({ ...erros, descricao: "" });
-                  }}
-                  className="flex-1 text-lg w-full p-2 border border-black rounded-lg text-sm resize-none"
-                />
-                <InputError message={erros.descricao} />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="border-t p-4 flex justify-end gap-2">
-          <Button variant="secondary" onClick={() => setMostrarDados(false)}>
-            Cancelar
-          </Button>
-          <Button onClick={salvarChamado}>
-            {idItem ? "Salvar alterações" : "Adicionar chamado"}
-          </Button>
-        </div>
+     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30 p-4">
+    <div className="
+      bg-white dark:bg-gray-900 dark:text-white text-black 
+      rounded-lg shadow-lg 
+      w-full max-w-4xl 
+      h-[60vh]
+      flex flex-col
+      overflow-hidden
+    ">
+      
+      {/* Cabeçalho */}
+      <div className="p-4 border-b">
+        <h2 className="text-xl font-semibold">
+          {idItem ? "Editar Chamado" : "Criar Novo Chamado"}
+        </h2>
+        {!idItem && <p className="opacity-70">Registre um novo pedido de assistência técnica</p>}
       </div>
+
+      {/* Conteúdo scrollável */}
+      <div className="flex-1 overflow-auto p-4">
+        {loading ? (
+          <p>Carregando...</p>
+        ) : erro ? (
+          <p className="text-red-500">{erro}</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+
+            {/* Grid principal */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <div>
+                <p className="mb-1">Produto</p>
+                <Input
+                  className="text-black dark:text-white"
+                  value={chamado.produto}
+                  onChange={(e) => {
+                    setChamado({ ...chamado, produto: e.target.value });
+                    setErros({ ...erros, produto: "" });
+                  }}
+                />
+                <InputError message={erros.produto} />
+              </div>
+
+              <div>
+                <p className="mb-1">Status</p>
+                <select
+                  className="w-full p-2 rounded-md 
+                  text-black dark:text-white 
+                  dark:bg-gray-800 dark:border-gray-600"
+                  value={chamado.status}
+                  onChange={(e) =>
+                    setChamado({ ...chamado, status: e.target.value as Chamados["status"] })
+                  }
+                >
+                  <option value="Na loja">Na loja</option>
+                  <option value="Fora da loja">Fora da loja</option>
+                  <option value="Em andamento">Em andamento</option>
+                  <option value="Finalizado">Finalizado</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
+
+              <div>
+                <p className="mb-1">Nome do Cliente</p>
+                <Input
+                  className="text-black dark:text-white"
+                  value={chamado.nomeCliente}
+                  onChange={(e) => {
+                    setChamado({ ...chamado, nomeCliente: e.target.value });
+                    setErros({ ...erros, nomeCliente: "" });
+                  }}
+                />
+                <InputError message={erros.nomeCliente} />
+              </div>
+
+              <div>
+                <p className="mb-1">Email do Cliente</p>
+                <Input
+                  type="email"
+                  className="text-black dark:text-white"
+                  value={chamado.emailCliente}
+                  onChange={(e) => {
+                    setChamado({ ...chamado, emailCliente: e.target.value });
+                    setErros({ ...erros, emailCliente: "" });
+                  }}
+                />
+                <InputError message={erros.emailCliente} />
+              </div>
+
+              <div>
+                <p className="mb-1">Telefone</p>
+                <Input
+                  className="text-black dark:text-white"
+                  value={chamado.telefoneCliente || ""}
+                  onChange={(e) => {
+                    setChamado({ ...chamado, telefoneCliente: String(e.target.value) });
+                    setErros({ ...erros, telefoneCliente: "" });
+                  }}
+                />
+                <InputError message={erros.telefoneCliente} />
+              </div>
+
+            </div>
+
+            {/* Descrição — ocupa mais espaço */}
+            <div className="flex flex-col flex-1">
+              <p className="mb-1">Descrição do problema</p>
+              <textarea
+                className="
+                  flex-1 p-3 rounded-lg border 
+                  text-black dark:text-white 
+                  dark:bg-gray-800 dark:border-gray-600 
+                  resize-none
+                "
+                value={chamado.descricao}
+                onChange={(e) => {
+                  setChamado({ ...chamado, descricao: e.target.value });
+                  setErros({ ...erros, descricao: "" });
+                }}
+              />
+              <InputError message={erros.descricao} />
+            </div>
+
+          </div>
+        )}
+      </div>
+
+      {/* Rodapé com botões */}
+      <div className="p-4 border-t flex justify-end gap-2 bg-white dark:bg-gray-900">
+        <Button variant="secondary" onClick={() => setMostrarDados(false)}>
+          Cancelar
+        </Button>
+        <Button onClick={salvarChamado}>
+          {idItem ? "Salvar alterações" : "Adicionar chamado"}
+        </Button>
+      </div>
+
     </div>
+  </div>
   );
 }
