@@ -39,9 +39,29 @@ export default function Inicial() {
     produtosFiltrados,
   });
 
-  useEffect(() => {
-    setPaginaAtual(1);
-  }, [pesquisar, categoriaAplicada, faixaPrecoAplicada]);
+const authUser = localStorage.getItem("authUser");
+
+ useEffect(() => {
+  if (!authUser) return; // ainda não logou
+
+  const usuarioRaw = localStorage.getItem("usuario");
+  if (!usuarioRaw) return; // usuário ainda não salvo
+
+  const usuario = JSON.parse(usuarioRaw);
+
+  const usuarioAtualizado = {
+    ...usuario,
+    isVendedor: true,
+    dadosVendedor: {
+      nomeDaLoja: "patos",
+      cnpj: ""
+    }
+  };
+
+  localStorage.setItem("usuario", JSON.stringify(usuarioAtualizado));
+  console.log("Usuário atualizado:", usuarioAtualizado);
+
+}, [authUser]);
 
   const totalPaginas = Math.max(
     1,

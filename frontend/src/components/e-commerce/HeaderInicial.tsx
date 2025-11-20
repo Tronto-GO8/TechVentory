@@ -40,7 +40,7 @@ export default function HeaderInicial() {
       <Link to={"/app/inicial"}>
         <Button
           variant={"ghost"}
-          className="text-xl hover:bg-[#074964] font-semibold font-sans text-white"
+          className="text-xl hover:bg-[#074964] font-semibold font-sans dark:border-white"
         >
             <img
             src={LogoDarkMode}
@@ -68,7 +68,7 @@ export default function HeaderInicial() {
             </Button>
           </>
         ) : (
-          <Button onClick={() => navigate("/login")} className="text-white">
+          <Button onClick={() => navigate("/login")} className="dark:text-white">
             Entrar
           </Button>
         )}

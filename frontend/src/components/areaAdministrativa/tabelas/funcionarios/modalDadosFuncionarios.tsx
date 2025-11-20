@@ -27,7 +27,7 @@ export default function ModalDadosFuncionarios({
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [funcionario, setFuncionario] = useState<Funcionario>({
-    id: 0,
+    id: 1,
     nome: "",
     cargo: "Vendedor",
     dataAdmissao: new Date(),
@@ -60,6 +60,8 @@ export default function ModalDadosFuncionarios({
   };
 
   // 🟦 Buscar dados se for edição
+
+
   useEffect(() => {
     if (!idItem) return;
     async function getFuncionario() {
@@ -111,10 +113,11 @@ export default function ModalDadosFuncionarios({
       console.error(err);
     }
   };
+  
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-30">
-      <div className="bg-white rounded-lg shadow-lg w-[90vw] sm:w-[70vw] md:w-[50vw] h-[80vh] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-lg shadow-lg w-[90vw] sm:w-[70vw] md:w-[50vw] h-[60vh] overflow-hidden flex flex-col dark:bg-gray-900 dark:border-white">
         <div className="flex justify-between items-center p-2">
           <div>
             <h2 className="text-lg font-semibold">
@@ -130,11 +133,12 @@ export default function ModalDadosFuncionarios({
           ) : erro ? (
             <p className="text-red-500">{erro}</p>
           ) : (
-            <div className="flex flex-col gap-2 border h-full">
+            <div className="flex flex-col gap-2 h-full dark:bg-gray-900 dark:border-white ">
               <div className="grid grid-cols-2 grid-rows-3 gap-2 p-2 rounded-md">
                 <div>
                   <p>Nome</p>
                   <Input
+                    className="dark:bg-gray-900 dark:border-white"
                     value={funcionario.nome}
                     onChange={(e) => {
                       setFuncionario({ ...funcionario, nome: e.target.value });
@@ -145,9 +149,9 @@ export default function ModalDadosFuncionarios({
                 </div>
 
                 <div>
-                  <p>Cargo</p>
+                  <p className="dark:bg-gray-900 dark:border-white">Cargo</p>
                   <select
-                    className="w-full rounded-md p-1.5 border"
+                    className="w-full rounded-md p-1.5 dark:bg-gray-900 dark:border-white"
                     value={funcionario.cargo}
                     onChange={(e) =>
                       setFuncionario({
@@ -166,6 +170,7 @@ export default function ModalDadosFuncionarios({
                 <div>
                   <p>Data de Admissão</p>
                   <Input
+                    className="dark:bg-gray-900 dark:border-white"
                     type="date"
                     value={funcionario.dataAdmissao.toISOString().split("T")[0]}
                     onChange={(e) =>
@@ -178,10 +183,11 @@ export default function ModalDadosFuncionarios({
                   <InputError message={erros.dataAdmissao} />
                 </div>
 
-                <div>
+                <div className="dark:bg-gray-900 dark:border-white dark:bg-gray-900 ">
                   <p>Email</p>
                   <Input
                     type="email"
+                    className="dark:bg-gray-900 dark:border-white"
                     value={funcionario.email}
                     onChange={(e) => {
                       setFuncionario({ ...funcionario, email: e.target.value });
@@ -195,6 +201,7 @@ export default function ModalDadosFuncionarios({
                   <p>Telefone</p>
                   <Input
                     type="number"
+                    className="dark:bg-gray-900 dark:border-white"
                     value={funcionario.telefone || ""}
                     onChange={(e) => {
                       setFuncionario({ ...funcionario, telefone: Number(e.target.value) });
@@ -205,7 +212,7 @@ export default function ModalDadosFuncionarios({
                 </div>
               </div>
               <div className="top-0 left-0 w-full bg-white pl-2">
-                <div >
+                <div className="dark:bg-gray-900 dark:border-white text-black">
                   <ListaPermissoesCargo cargo={funcionario.cargo} />
                 </div>
               </div>
